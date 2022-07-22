@@ -1,1 +1,1 @@
-let e;function t(t){let l=t,r=new Set;return{_r:!0,get value(){return e&&r.add(e),l},set value(e){l=e;for(let t of r)t(e)},watch:e=>(r.add(e),e(l),()=>r.delete(e))}}let l=l=>{let r=t(),u=()=>{if(u===e)throw"∞";let t=e;e=u,r.value=l(),e=t};return u(),r};export{l as effect,t as r};
+let e;function t(t){let r=t,l=new Set;return{_r:!0,get value(){return e&&l.add(e),r},set value(e){r=e,l.forEach(t=>t(e))},watch:e=>(l.add(e),e(r),()=>l.delete(e))}}let r=r=>{let l=t(),a=()=>{if(a===e)throw"∞";let t=e;e=a,l.value=r(),e=t};return a(),l};export{r as effect,t as r};

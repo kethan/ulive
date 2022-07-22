@@ -20,7 +20,7 @@ export function r<T>(val?: T): Observable<T | undefined> {
     },
     set value(val: T) {
       _val = val;
-      for (let subscribeFunc of _subscribers) subscribeFunc(val);
+      _subscribers.forEach((subscribeFunc) => subscribeFunc(val));
     },
     watch(func) {
       _subscribers.add(func);

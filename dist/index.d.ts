@@ -7,4 +7,4 @@ export interface Observable<T> {
 export declare function r<T>(): Observable<T | undefined>;
 export declare function r<T>(val: undefined): Observable<T | undefined>;
 export declare function r<T>(val: T): Observable<T>;
-export declare let effect: <T>(func: () => T) => Observable<T | undefined>;
+export declare let effect: <T>(func: () => T) => Observable<T>;
