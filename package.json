@@ -1,7 +1,7 @@
 {
   "name": "ulive",
   "description": "live reactive",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "source": "./src/index.ts",
   "type": "module",
   "exports": {
@@ -15,9 +15,9 @@
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.module.js",
-  "unpkg": "./dist/index.umd.js",
+  "unpkg": "./dist/index.cjs.js",
   "scripts": {
-    "build": "microbundle build -i src/index.ts --sourcemap false -f modern,esm,cjs,umd",
+    "build": "microbundle build -i src/index.ts --sourcemap false -f modern,esm,cjs,iife",
     "dev": "microbundle watch"
   },
   "files": [
