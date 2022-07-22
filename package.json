@@ -1,10 +1,8 @@
 {
   "name": "ulive",
   "description": "live reactive",
-  "version": "0.0.3",
-  "sideEffects": false,
-  "type": "module",
-  "source": "src/index.ts",
+  "version": "0.0.4",
+  "source": "./src/index.ts",
   "exports": {
     "require": "./dist/index.cjs",
     "default": "./dist/index.modern.js"
