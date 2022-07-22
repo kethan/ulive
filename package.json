@@ -1,7 +1,7 @@
 {
   "name": "ulive",
   "description": "live reactive",
-  "version": "0.0.12",
+  "version": "0.1.2",
   "source": "./src/index.ts",
   "type": "module",
   "exports": {
