@@ -1,55 +1,61 @@
 {
-  "name": "ulive",
-  "description": "live reactive",
-  "version": "0.0.5",
-  "source": "./src/index.ts",
-  "exports": {
-    "require": "./dist/index.cjs",
-    "default": "./dist/index.modern.js"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.module.js",
-  "unpkg": "./dist/index.umd.js",
-  "scripts": {
-    "build": "microbundle --sourcemap false",
-    "dev": "microbundle watch"
-  },
-  "files": [
-    "dist"
-  ],
-  "devDependencies": {
-    "microbundle": "^0.15.0",
-    "typescript": "^4.6.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kethan/ulive.git"
-  },
-  "keywords": [
-    "observable",
-    "createeffect",
-    "useeffect",
-    "state",
-    "computed",
-    "ref",
-    "atom",
-    "computeds",
-    "memo",
-    "derivation",
-    "behavior",
-    "effect",
-    "signal",
-    "watch",
-    "live",
-    "reactive",
-    "react",
-    "preact"
-  ],
-  "author": "Kethan Surana",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kethan/index/issues"
-  },
-  "homepage": "https://github.com/kethan/index#readme",
-  "types": "./dist\\index.d.ts"
+	"name": "ulive",
+	"description": "live reactive",
+	"version": "0.0.5",
+	"source": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.d.ts",
+			"browser": "./dist/index.moders.js",
+			"umd": "./dist/index.umd.js",
+			"require": "./dist/index.cjs",
+			"import": "./dist/index.modern.mjs",
+			"default": "./dist/index.modern.js"
+		}
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.module.js",
+	"unpkg": "./dist/index.umd.js",
+	"scripts": {
+		"build": "microbundle --sourcemap false",
+		"dev": "microbundle watch"
+	},
+	"files": [
+		"dist"
+	],
+	"devDependencies": {
+		"microbundle": "^0.15.0",
+		"typescript": "^4.6.4"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kethan/ulive.git"
+	},
+	"keywords": [
+		"observable",
+		"createeffect",
+		"useeffect",
+		"state",
+		"computed",
+		"ref",
+		"atom",
+		"computeds",
+		"memo",
+		"derivation",
+		"behavior",
+		"effect",
+		"signal",
+		"watch",
+		"live",
+		"reactive",
+		"react",
+		"preact"
+	],
+	"author": "Kethan Surana",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/kethan/index/issues"
+	},
+	"homepage": "https://github.com/kethan/index#readme",
+	"types": "./dist\\index.d.ts"
 }
