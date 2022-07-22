@@ -15,7 +15,7 @@
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.module.js",
-  "unpkg": "./dist/index.cjs.js",
+  "unpkg": "./dist/index.cjs",
   "scripts": {
     "build": "microbundle build -i src/index.ts --sourcemap false -f modern,esm,cjs,iife",
     "dev": "microbundle watch"
