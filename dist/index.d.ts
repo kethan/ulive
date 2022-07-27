@@ -2,7 +2,7 @@ export declare type Func<T> = (v: T) => void;
 export interface Observable<T> {
     _r: boolean;
     value: T;
-    watch(v: Func<T>): void;
+    subscribe(v: Func<T>): void;
 }
 export declare function r<T>(): Observable<T | undefined>;
 export declare function r<T>(val: undefined): Observable<T | undefined>;

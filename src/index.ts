@@ -3,7 +3,7 @@ export type Func<T> = (v: T) => void;
 export interface Observable<T> {
   _r: boolean;
   value: T;
-  watch(v: Func<T>): void;
+  subscribe(v: Func<T>): void;
 }
 
 export function r<T>(): Observable<T | undefined>;
@@ -22,7 +22,7 @@ export function r<T>(val?: T): Observable<T | undefined> {
       _val = val;
       _subscribers.forEach((subscribeFunc) => subscribeFunc(val));
     },
-    watch(func) {
+    subscribe(func) {
       _subscribers.add(func);
       func(_val);
       return () => _subscribers.delete(func);
