@@ -1,13 +1,13 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"source": "./src/index.js",
 	"type": "module",
-	"types": "./src/index.d.ts",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./src/index.d.ts",
+			"types": "./dist/index.d.ts",
 			"require": "./dist/index.cjs",
 			"import": "./dist/index.modern.js",
 			"default": "./dist/index.modern.js"
