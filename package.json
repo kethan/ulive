@@ -1,13 +1,13 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "0.2.0",
-	"source": "./src/index.ts",
+	"version": "0.3.0",
+	"source": "./src/index.js",
 	"type": "module",
+	"types": "./src/index.d.ts",
 	"exports": {
 		".": {
 			"types": "./src/index.d.ts",
-			"umd": "./dist/index.umd.js",
 			"require": "./dist/index.cjs",
 			"import": "./dist/index.modern.js",
 			"default": "./dist/index.modern.js"
@@ -17,13 +17,15 @@
 	"module": "./dist/index.module.js",
 	"unpkg": "./dist/index.cjs",
 	"scripts": {
-		"build": "microbundle build -i src/index.ts --sourcemap false --raw -f modern,esm,cjs,iife",
+		"copy-dts": "copyfiles -u 1 \"src/**/*.d.ts\" dist",
+		"build": "npm run copy-dts && microbundle build -i src/index.js --no-generateTypes --sourcemap false --raw -f modern,esm,iife",
 		"dev": "microbundle watch"
 	},
 	"files": [
 		"dist"
 	],
 	"devDependencies": {
+		"copyfiles": "^2.4.1",
 		"microbundle": "^0.15.0",
 		"typescript": "^4.6.4"
 	},
@@ -57,7 +59,6 @@
 		"url": "https://github.com/kethan/index/issues"
 	},
 	"homepage": "https://github.com/kethan/index#readme",
-	"types": "./dist/index.d.ts",
 	"dependencies": {},
 	"browserslist": [
 		"defaults",

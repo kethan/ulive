@@ -1,13 +1,12 @@
 # ULive
 
-[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive)
-![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=gzip&label=gzip&style=flat-square)
+[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=gzip&label=gzip&style=flat-square)](https://unpkg.com/ulive)
+
+**yarn**: `yarn add ulive`
 
 **npm**: `npm i ulive`
 
-**npm**: `yarn add ulive`
-
-**cdn**: https://unpkg.com/ulive  
+**cdn**: https://unpkg.com/ulive
 
 **module**: https://unpkg.com/ulive?module
 
@@ -17,12 +16,13 @@
 -   **Simple API**
 
 ## API
-### r(val)
+
+### o(val)
 
 Create a reactive or live state.
 
 ```js
-const num = r(0);
+const num = o(0);
 ```
 
 ### effect(fn)
@@ -32,27 +32,34 @@ Returns: observable
 Run fn with automatic dependency check. If the value is returned it acts as computed state.
 
 ```js
-const num = r(0);
-effect(() => console.log(num.value));
-const mul = effect(() => num.value * 2);
+let num = o(0);
+let square = () => num() * num();
+let cube = () => square() * num();
+effect(() => console.log(num(), square(), cube()));
 ```
 
-### subscribe
+### subscribe and unsubscribe
 
 Subsribe to live changes
+
 ```js
-const num = r(0);
-num.subscribe((val) => console.log(val));
+const num = o(0);
+let unsub = num((val) => console.log(val));
+// unsubscribe
+unsub();
 ```
 
 ## Usage
 
 ```js
-const num = r(1);
-num.subscribe((v) => console.log(v));
-const mul = effect(() => num.value * 2);
-console.log(num.value);
-console.log(mul.value);
+const num = o(1);
+num((val) => console.log(val));
+let square = () => num() * num();
+let cube = () => square() * num();
+effect(() => console.log(num(), square(), cube()));
+num(1);
+num(2);
+num(3);
 ```
 
 ## Thanks
