@@ -1,32 +1,51 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "0.3.1",
-	"source": "./src/index.js",
+	"version": "0.4.0",
+	"source": "src/index.js",
 	"type": "module",
-	"types": "./dist/index.d.ts",
+	"types": "dist/index.d.ts",
+	"main": "dist/ulive.js",
+	"module": "dist/ulive.es.js",
+	"unpkg": "dist/ulive.min.js",
+	"umd:main": "dist/ulive.umd.js",
+	"size-limit": [
+		{
+			"path": "dist/ulive.min.js",
+			"limit": "330 B"
+		}
+	],
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"require": "./dist/index.cjs",
-			"import": "./dist/index.modern.js",
-			"default": "./dist/index.modern.js"
+			"browser": "./dist/ulive.es.js",
+			"umd": "./dist/ulive.umd.js",
+			"require": "./dist/ulive.js",
+			"import": "./dist/ulive.es.js",
+			"default": "./dist/ulive.es.js"
 		}
 	},
-	"main": "./dist/index.cjs",
-	"module": "./dist/index.module.js",
-	"unpkg": "./dist/index.cjs",
 	"scripts": {
-		"copy-dts": "copyfiles -u 1 \"src/**/*.d.ts\" dist",
-		"build": "npm run copy-dts && microbundle build -i src/index.js --no-generateTypes --sourcemap false --raw -f modern,esm,iife",
-		"dev": "microbundle watch"
+		"copy:dts": "copyfiles -u 1 \"src/**/*.d.ts\" dist",
+		"size": "size-limit",
+		"rm": "sed -i 's/__proto__: null,//' dist/ulive.es.js",
+		"build": "npm run build:cjs && npm run build:es && npm run build:min && npm run build:umd && npm run build:esm && npm run copy:dts && npm run size",
+		"build:umd": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.umd.js --format umd --name ulive",
+		"build:min": "npm run rm && terser dist/ulive.es.js -o dist/ulive.min.js -c passes=3 --module --mangle-props reserved=[effect,o,computed,signal,batch,memo]",
+		"build:es": "rollup src/index.cjs -p @rollup/plugin-node-resolve --file dist/ulive.es.js --no-freeze --format esm",
+		"build:cjs": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.js --format cjs",
+		"build:esm": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.es.js --no-freeze --format esm"
 	},
 	"files": [
 		"dist"
 	],
 	"devDependencies": {
+		"@rollup/plugin-node-resolve": "^14.0.1",
+		"@size-limit/file": "^8.1.0",
 		"copyfiles": "^2.4.1",
-		"microbundle": "^0.15.0",
+		"rollup": "^2.79.0",
+		"size-limit": "^8.1.0",
+		"terser": "^5.15.0",
 		"typescript": "^4.6.4"
 	},
 	"repository": {

@@ -1,6 +1,6 @@
 let glue;
 let batches;
-export let batch = (fn, prev) => {
+let batch = (fn, prev) => {
   prev = batches;
   batches = new Set();
   try {
@@ -11,7 +11,7 @@ export let batch = (fn, prev) => {
   }
 };
 
-export let signal = (val, n) => {
+let signal = (val, n) => {
   n = o(val);
   return {
     get value() {
@@ -25,7 +25,7 @@ export let signal = (val, n) => {
   };
 };
 
-export let o = (val, listeners = new Set(), f) => {
+let o = (val, listeners = new Set(), f) => {
   f = (next) => {
     if (!next) {
       if (glue) listeners.add(glue);
@@ -47,7 +47,7 @@ export let o = (val, listeners = new Set(), f) => {
   };
   return f;
 };
-export let effect = (fn, prev) => {
+let effect = (fn, prev) => {
   prev = glue;
   glue = fn;
   try {
@@ -56,13 +56,15 @@ export let effect = (fn, prev) => {
     glue = prev;
   }
 };
-export let memo = (cb, m) => {
+let memo = (cb, m) => {
   m = o();
   effect(() => m(cb()));
   return m;
 };
-export let computed = (cb, m) => {
+let computed = (cb, m) => {
   m = signal();
   effect(() => (m.value = cb()));
   return m;
 };
+
+export { batch, computed, effect, memo, o, signal };

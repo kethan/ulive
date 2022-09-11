@@ -1,1 +1,0 @@
-let e,t=function(t,r,o){return void 0===o&&(o=new Set),(r=r=>{if(void 0===r)return e&&o.add(e),t;if(r.call)return o.add(r),()=>o.delete(r);for(r of(t=r,o))r&&r(t)})._o=1,r},r=r=>{let o=t(),d=()=>{if(d===e)throw"1/0";let t=e;e=d,o(r()),e=t};return d(),o};export{r as effect,t as o};
