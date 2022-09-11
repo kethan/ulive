@@ -1,7 +1,7 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "0.4.1",
+	"version": "0.4.2",
 	"source": "src/index.js",
 	"type": "module",
 	"types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
 	"size-limit": [
 		{
 			"path": "dist/ulive.min.js",
-			"limit": "340 B"
+			"limit": "350 B"
 		}
 	],
 	"exports": {
