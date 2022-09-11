@@ -21,20 +21,20 @@ export let signal = (val, n) => {
       n(next);
     },
     peek: n.peek,
-    subscribe: n.subscribe
+    subscribe: n.subscribe,
   };
 };
 
 export let o = (val, listeners = new Set(), f) => {
-  f = (next) => {
-    if (!next) {
+  f = (...next) => {
+    if (!next.length) {
       if (glue) listeners.add(glue);
       return val;
     }
-    if (val !== next) {
-      val = next;
+    if (val !== next[0]) {
+      val = next[0];
       for (let cb of listeners) {
-        if (cb === glue) throw "1/10";
+        if (cb === glue) throw '1/10';
         batches ? batches.add(cb) : cb(val);
       }
     }
@@ -42,7 +42,6 @@ export let o = (val, listeners = new Set(), f) => {
   f.peek = () => val;
   f.subscribe = (cb) => {
     listeners.add(cb);
-    cb(val);
     return () => listeners.delete(cb);
   };
   return f;
@@ -58,7 +57,9 @@ export let effect = (fn, prev) => {
 };
 export let memo = (cb, m) => {
   m = o();
-  effect(() => m(cb()));
+  effect(() => {
+    m(cb());
+  });
   return m;
 };
 export let computed = (cb, m) => {

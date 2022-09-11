@@ -27,20 +27,20 @@
         n(next);
       },
       peek: n.peek,
-      subscribe: n.subscribe
+      subscribe: n.subscribe,
     };
   };
 
   let o = (val, listeners = new Set(), f) => {
-    f = (next) => {
-      if (!next) {
+    f = (...next) => {
+      if (!next.length) {
         if (glue) listeners.add(glue);
         return val;
       }
-      if (val !== next) {
-        val = next;
+      if (val !== next[0]) {
+        val = next[0];
         for (let cb of listeners) {
-          if (cb === glue) throw "1/10";
+          if (cb === glue) throw '1/10';
           batches ? batches.add(cb) : cb(val);
         }
       }
@@ -48,7 +48,6 @@
     f.peek = () => val;
     f.subscribe = (cb) => {
       listeners.add(cb);
-      cb(val);
       return () => listeners.delete(cb);
     };
     return f;
@@ -64,7 +63,9 @@
   };
   let memo = (cb, m) => {
     m = o();
-    effect(() => m(cb()));
+    effect(() => {
+      m(cb());
+    });
     return m;
   };
   let computed = (cb, m) => {
