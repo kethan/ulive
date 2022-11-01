@@ -10,11 +10,11 @@
 
 **module**: https://unpkg.com/ulive?module
 
--   **Small.** 300 bytes gzip.
+-   **Small.** 280 bytes gzip.
 -   **Fast.**
--   **Reactive.** automatic derivation.
--   **Value Ref or Observable Syntax**
 -   **Simple API**
+-   **Reactive.** Automatic derivation.
+-   **Value Ref or Observable Syntax**
 -   **Circular Detection**
 
 ## API
@@ -24,7 +24,7 @@
 Create a reactive or live state.
 
 ```js
-import { o, signal, computed, memo, effect, batch } from "ulive";
+import { o, signal, computed, memo, effect } from "ulive";
 
 const num = o(0);
 num(10);
@@ -68,58 +68,6 @@ let cube = computed(() => square.value * num.value);
 effect(() => console.log(num.value, square.value, cube.value));
 ```
 
-### Subscribe and Unsubscribe
-
-Subscribes a obs/signal and returns a function to unsub
-
-```js
-let num = o(0);
-let off = num.subscribe((val) => console.log(val));
-// unsubscribe
-off();
-
-let num = signal(0);
-let off = num.subscribe((val) => console.log(val));
-// unsubscribe
-off();
-```
-
-### batch
-
-The batch function allows you to combine multiple signal writes into one single update that is triggered at the end when the callback completes.
-
-```js
-const name = o("Jane");
-const surname = o("Doe");
-const fullName = memo(() => name() + " " + surname());
-
-// Logs: "Jane Doe"
-effect(() => console.log(fullName()));
-
-// Combines both signal writes into one update. Once the callback
-// returns the `effect` will trigger and we'll log "Foo Bar"
-batch(() => {
-	name("Foo");
-	surname("Bar");
-});
-
-//or
-
-const name = signal("Jane");
-const surname = signal("Doe");
-const fullName = computed(() => name.value + " " + surname.value);
-
-// Logs: "Jane Doe"
-effect(() => console.log(fullName.value));
-
-// Combines both signal writes into one update. Once the callback
-// returns the `effect` will trigger and we'll log "Foo Bar"
-batch(() => {
-	name.value = "Foo";
-	surname.value = "Bar";
-});
-```
-
 ### peek
 
 ```js
@@ -144,6 +92,7 @@ effect(() => {
 	effectCount.value = effectCount.peek() + 1;
 });
 ```
+
 ## Usage
 
 ```js
@@ -176,7 +125,6 @@ off();
 -   **[Emnudge](https://github.com/EmNudge)**
 -   **[WebReflection](https://github.com/WebReflection/usignal)**
 -   **[Preact](https://github.com/preactjs/signals)**
-
 ## License
 
 MIT
