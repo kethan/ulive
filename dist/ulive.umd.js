@@ -4,13 +4,6 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.ulive = {}));
 })(this, (function (exports) { 'use strict';
 
-  /**
-   * ISC License
-   *
-   * Copyright (c) 2022, Andrea Giammarchi, @WebReflection
-   *
-   */
-
   let glue;
 
   let signal = (val, n) => {
@@ -41,7 +34,7 @@
       }
     };
     f.$o = 1;
-    f.peek = f.toString = f.valueOf = () => val;
+    f.toJSON = f.then = f.toString = f.valueOf = () => val;
     return f;
   };
 

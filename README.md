@@ -68,7 +68,7 @@ let cube = computed(() => square.value * num.value);
 effect(() => console.log(num.value, square.value, cube.value));
 ```
 
-### peek
+### toJSON or then or valueOf
 
 ```js
 const counter = o(0);
@@ -78,7 +78,7 @@ effect(() => {
 	console.log(counter());
 	// Whenever this effect is triggered, increase `effectCount`.
 	// But we don't want this signal to react to `effectCount`
-	effectCount(effectCount.peek() + 1);
+	effectCount(effectCount.valueOf() + 1);
 });
 
 //or
@@ -89,7 +89,7 @@ effect(() => {
 	console.log(counter.value);
 	// Whenever this effect is triggered, increase `effectCount`.
 	// But we don't want this signal to react to `effectCount`
-	effectCount.value = effectCount.peek() + 1;
+	effectCount.value = effectCount.valueOf() + 1;
 });
 ```
 
@@ -97,26 +97,22 @@ effect(() => {
 
 ```js
 const num = o(1);
-let off = num.on((val) => console.log(val));
 let square = memo(() => num() * num());
 let cube = memo(() => square() * num());
 effect(() => console.log(num(), square(), cube()));
 num(1);
 num(2);
 num(3);
-off();
 
 //or
 
 const num = signal(1);
-let off = num.on((val) => console.log(val));
 let square = computed(() => num.value * num.value);
 let cube = computed(() => square.value * num.value);
 effect(() => console.log(num.value, square.value, cube.value));
 num.value = 1;
 num.value = 2;
 num.value = 3;
-off();
 ```
 
 ## Thanks and Inspiration

@@ -2,13 +2,6 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-/**
- * ISC License
- *
- * Copyright (c) 2022, Andrea Giammarchi, @WebReflection
- *
- */
-
 let glue;
 
 let signal = (val, n) => {
@@ -39,7 +32,7 @@ let o = (val, listeners = new Set(), f) => {
     }
   };
   f.$o = 1;
-  f.peek = f.toString = f.valueOf = () => val;
+  f.toJSON = f.then = f.toString = f.valueOf = () => val;
   return f;
 };
 

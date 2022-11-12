@@ -1,10 +1,3 @@
-/**
- * ISC License
- *
- * Copyright (c) 2022, Andrea Giammarchi, @WebReflection
- *
- */
-
 let glue;
 
 export let signal = (val, n) => {
@@ -35,7 +28,7 @@ export let o = (val, listeners = new Set(), f) => {
     }
   };
   f.$o = 1;
-  f.peek = f.toString = f.valueOf = () => val;
+  f.toJSON = f.then = f.toString = f.valueOf = () => val;
   return f;
 };
 

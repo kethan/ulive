@@ -2,13 +2,15 @@ export type Disposer = () => void;
 export type Observable<T = unknown> = {
     (): T;
     (value: T): T;
-    peek: () => T;
+    then: () => T;
+    toJSON: () => T;
     valueOf: () => T;
     toString: () => T;
 };
 export type Signal<T = unknown> = {
     value: T;
-    peek: () => T;
+    then: () => T;
+    toJSON: () => T;
     valueOf: () => T;
     toString: () => T;
 };
