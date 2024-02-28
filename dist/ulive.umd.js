@@ -50,6 +50,4 @@
   exports.signal = signal;
   exports.untracked = untracked;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-
 }));
