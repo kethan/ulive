@@ -1,7 +1,7 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "0.5.1",
+	"version": "0.6",
 	"source": "src/index.js",
 	"type": "module",
 	"types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
 	"size-limit": [
 		{
 			"path": "dist/ulive.min.js",
-			"limit": "300 B"
+			"limit": "350 B"
 		}
 	],
 	"exports": {
@@ -31,7 +31,7 @@
 		"rm": "sed -i 's/__proto__: null,//' dist/ulive.es.js",
 		"build": "npm run build:cjs && npm run build:es && npm run build:min && npm run build:umd && npm run build:esm && npm run copy:dts && npm run size",
 		"build:umd": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.umd.js --format umd --name ulive",
-		"build:min": "npm run rm && terser dist/ulive.es.js -o dist/ulive.min.js -c passes=3 --module --mangle-props reserved=[effect,o,computed,signal,batch,memo]",
+		"build:min": "npm run rm && terser dist/ulive.es.js -o dist/ulive.min.js -c passes=3 --module --mangle-props reserved=[effect,o,computed,signal,batch,memo,untracked]",
 		"build:es": "rollup src/index.cjs -p @rollup/plugin-node-resolve --file dist/ulive.es.js --no-freeze --format esm",
 		"build:cjs": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.js --format cjs",
 		"build:esm": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.es.js --no-freeze --format esm"
