@@ -1,4 +1,4 @@
-# ULive
+# ULive [![test](https://github.com/kethan/ulive/actions/workflows/test.yml/badge.svg)](https://github.com/kethan/ulive/actions/workflows/test.yml)
 
 [![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=brotli&label=brotli&style=flat-square)](https://unpkg.com/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=gzip&label=gzip&style=flat-square)](https://unpkg.com/ulive)
 
@@ -14,7 +14,7 @@
 -   **Fast.**
 -   **Simple API**
 -   **Reactive.** Automatic derivation.
--   **Value Ref or Observable Syntax**
+-   **Value Ref Syntax**
 -   **Circular Detection**
 
 ## API
