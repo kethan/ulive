@@ -1,7 +1,7 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "0.6",
+	"version": "0.6.1",
 	"source": "src/index.js",
 	"type": "module",
 	"types": "dist/index.d.ts",
