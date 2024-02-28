@@ -1,4 +1,4 @@
-# ULive
+# ULive [![test](https://github.com/kethan/ulive/actions/workflows/test.yml/badge.svg)](https://github.com/kethan/ulive/actions/workflows/test.yml)
 
 [![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=brotli&label=brotli&style=flat-square)](https://unpkg.com/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=gzip&label=gzip&style=flat-square)](https://unpkg.com/ulive)
 
@@ -14,22 +14,17 @@
 -   **Fast.**
 -   **Simple API**
 -   **Reactive.** Automatic derivation.
--   **Value Ref or Observable Syntax**
+-   **Value Ref Syntax**
 -   **Circular Detection**
 
 ## API
 
-### o(val) or signal(val)
+### signal(val)
 
 Create a reactive or live state.
 
 ```js
-import { o, signal, computed, memo, effect } from "ulive";
-
-const num = o(0);
-num(10);
-console.log(num());
-//or
+import { signal, computed, memo, effect } from "ulive";
 
 const num = signal(0);
 num.value = 10;
@@ -38,30 +33,18 @@ console.log(num.value);
 
 ### effect(fn)
 
-Run fn with automatic dependency check.
+Run fn with automatic dependency check & cleanup return.
 
 ```js
-let num = o(0);
-effect(() => console.log(num()));
-
-//or
-
 let num = signal(0);
 effect(() => console.log(num.value));
 ```
 
-### memo(fn) or computed(fn)
+### computed(fn)
 
-Returns computed/memo value
+Returns computed value
 
 ```js
-let num = o(0);
-let square = memo(() => num() * num());
-let cube = memo(() => square() * num());
-effect(() => console.log(num(), square(), cube()));
-
-//or
-
 let num = signal(0);
 let square = computed(() => num.value * num.value);
 let cube = computed(() => square.value * num.value);
@@ -71,17 +54,6 @@ effect(() => console.log(num.value, square.value, cube.value));
 ### toJSON or then or valueOf
 
 ```js
-const counter = o(0);
-const effectCount = o(0);
-
-effect(() => {
-	console.log(counter());
-	// Whenever this effect is triggered, increase `effectCount`.
-	// But we don't want this signal to react to `effectCount`
-	effectCount(effectCount.valueOf() + 1);
-});
-
-//or
 const counter = signal(0);
 const effectCount = signal(0);
 
@@ -96,16 +68,6 @@ effect(() => {
 ## Usage
 
 ```js
-const num = o(1);
-let square = memo(() => num() * num());
-let cube = memo(() => square() * num());
-effect(() => console.log(num(), square(), cube()));
-num(1);
-num(2);
-num(3);
-
-//or
-
 const num = signal(1);
 let square = computed(() => num.value * num.value);
 let cube = computed(() => square.value * num.value);
@@ -121,6 +83,7 @@ num.value = 3;
 -   **[Emnudge](https://github.com/EmNudge)**
 -   **[WebReflection](https://github.com/WebReflection/usignal)**
 -   **[Preact](https://github.com/preactjs/signals)**
+
 ## License
 
 MIT
