@@ -33,7 +33,7 @@ export let current,
       },
       peek: s.peek
     },
-    c.toJSON = c.then = c.toString = c.valueOf = s.valueOf,
+    c.toJSON = c.then = c.toString = c.valueOf = () => c.value,
     c
   ),
   batch = (fn) => fn(),
