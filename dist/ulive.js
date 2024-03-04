@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 exports.current = void 0;
   let signal = (v, s, obs = new Set) => (
     s = {

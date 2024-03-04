@@ -6,9 +6,9 @@
 
 **npm**: `npm i ulive`
 
-**cdn**: https://unpkg.com/ulive
+**cdn**: https://esm.sh/ulive
 
-**module**: https://unpkg.com/ulive?module
+**module**: https://esm.sh/ulive?module
 
 -   **Small.** 280 bytes gzip.
 -   **Fast.**
