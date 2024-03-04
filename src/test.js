@@ -22,6 +22,7 @@ t('signal: readme', async t => {
   effect(() => log.push(v2.value))
   is(log, [2])
   is(v2.value, 2) // > 2
+  is(v2.peek(), 2)
   is(v1.value, 1)
   is(log, [2])
   console.log('v1.value = 2')

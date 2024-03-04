@@ -30,9 +30,10 @@ export let current,
       get value() {
         e ||= effect(() => s.value = fn())
         return s.value
-      }
+      },
+      peek: s.peek
     },
-    c.toJSON = c.then = c.toString = c.valueOf = () => c.value,
+    c.toJSON = c.then = c.toString = c.valueOf = s.valueOf,
     c
   ),
   batch = (fn) => fn(),
