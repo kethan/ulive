@@ -25,7 +25,12 @@ t('signal: readme', async t => {
   is(v2.peek(), 2)
   is(v1.value, 1)
   is(log, [2])
+
   console.log('v1.value = 2')
+  v1.value = 2
+  is(log, [2, 4])
+
+  // ignore unchanged
   v1.value = 2
   is(log, [2, 4])
 
