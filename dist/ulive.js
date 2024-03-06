@@ -8,6 +8,7 @@ exports.current = void 0;
         return v
       },
       set value(val) {
+        if (val === v) return
         v = val;
         for (let sub of obs) sub(val); // notify effects
       },
@@ -32,7 +33,8 @@ exports.current = void 0;
       get value() {
         e ||= effect(() => s.value = fn());
         return s.value
-      }
+      },
+      peek: s.peek
     },
     c.toJSON = c.then = c.toString = c.valueOf = () => c.value,
     c
