@@ -6,6 +6,7 @@ export let current,
         return v
       },
       set value(val) {
+        if (val === v) return
         v = val
         for (let sub of obs) sub(val) // notify effects
       },
