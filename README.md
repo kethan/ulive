@@ -10,12 +10,9 @@
 
 **module**: https://esm.sh/ulive?module
 
--   **Small.** 280 bytes gzip.
+-   **Small.** 380 bytes gzip.
 -   **Fast.**
--   **Simple API**
--   **Reactive.** Automatic derivation.
--   **Value Ref Syntax**
--   **Circular Detection**
+-   **Preact-flavored API**
 
 ## API
 
