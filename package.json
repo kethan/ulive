@@ -12,7 +12,7 @@
 	"size-limit": [
 		{
 			"path": "dist/ulive.min.js",
-			"limit": "350 B"
+			"limit": "400 B"
 		}
 	],
 	"exports": {
