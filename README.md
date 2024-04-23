@@ -42,13 +42,34 @@ effect(() => console.log(num.value));
 
 ### computed(fn)
 
-Returns computed value
+Returns computed value.
 
 ```js
 let num = signal(0);
 let square = computed(() => num.value * num.value);
 let cube = computed(() => square.value * num.value);
 effect(() => console.log(num.value, square.value, cube.value));
+```
+
+### batch(fn)
+
+Defer effects.
+
+```js
+let a = signal(0), b = signal(1)
+let mul = computed(() => a.value * b.value);
+effect(() => console.log(a.value, b.value, mul.value));
+batch(() => (a++, b++));
+```
+
+### untracked(fn)
+
+Run without effects.
+
+```js
+let a = signal(0), b = signal(1)
+let mul = computed(() => a.value * b.value);
+effect(() => untracked(() => console.log(a.value)));
 ```
 
 ### toJSON or then or valueOf
