@@ -1,23 +1,23 @@
 let current, batched;
 
-const share = (s) => {
-  s.toJSON = s.then = s.toString = s.valueOf = () => s.value;
+const oShare = (s) => {
+  s.toJSON = s.then = s.toString = s.valueOf = () => s();
   return s;
 };
 
-const signal = (v, s, obs = new Set) => share(
-  {
-    get value() {
+
+const o = (v, obs = new Set(), f) => oShare(
+  f = (...next) => {
+    if (!next.length) {
       current?.deps.push(obs.add(current));
       return v;
-    },
-    set value(val) {
-      if (val === v) return;
-      v = val;
-      for (let sub of obs) batched ? batched.add(sub) : sub();
-    },
-    peek: () => v,
-  }
+    }
+    if (v !== next[0]) {
+      v = next[0];
+      for (let sub of obs) batched ? batched.add(sub) : sub(v);
+    }
+  },
+  f.peek = () => v
 );
 
 const effect = (fn, teardown, fx, deps) => (
@@ -31,14 +31,14 @@ const effect = (fn, teardown, fx, deps) => (
   (dep) => { teardown?.call?.(); while (dep = deps.pop()) dep.delete(fx); }
 );
 
-const computed = (fn, s = signal(), c, e) => share(
-  {
-    get value() {
-      e ||= effect(() => s.value = fn());
-      return s.value;
-    },
-    peek: s.peek
-  }
+const memo = (fn, s = o(), c, e) => oShare(
+  c = (...next) => {
+    if (!next.length) {
+      e ||= effect(() => s(fn()));
+      return s();
+    }
+  },
+  c.peek = s.peek
 );
 
 const batch = (fn) => {
@@ -55,4 +55,4 @@ const batch = (fn) => {
 
 const untracked = (fn, prev, v) => (prev = current, current = null, v = fn(), current = prev, v);
 
-export { batch, computed, effect, signal, untracked };
+export { batch, effect, memo, o, untracked };

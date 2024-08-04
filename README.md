@@ -1,6 +1,6 @@
 # ULive [![test](https://github.com/kethan/ulive/actions/workflows/test.yml/badge.svg)](https://github.com/kethan/ulive/actions/workflows/test.yml)
 
-[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=brotli&label=brotli&style=flat-square)](https://unpkg.com/ulive) [![Badge size](https://img.badgesize.io/https://unpkg.com/ulive?compression=gzip&label=gzip&style=flat-square)](https://unpkg.com/ulive)
+[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive&treeshake=[*]&config={"compression":"brotli"})](https://unpkg.com/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive&treeshake=[*]&config={"compression":"gzip"})](https://unpkg.com/ulive)
 
 **yarn**: `yarn add ulive`
 
@@ -10,21 +10,44 @@
 
 **module**: https://esm.sh/ulive?module
 
--   **Small.** 280 bytes gzip.
+-   **Small.**
 -   **Fast.**
 -   **Simple API**
--   **Reactive.** Automatic derivation.
--   **Value Ref Syntax**
+-   **Reactive.**
 -   **Circular Detection**
 
 ## API
+
+## Fn version
+
+This is function based signal.
+
+[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive/fn&treeshake=[*]&config={"compression":"brotli"})](https://unpkg.com/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive/fn&treeshake=[*]&config={"compression":"gzip"})](https://unpkg.com/ulive)
+
+
+**yarn**: `yarn add ulive`
+
+**npm**: `npm i ulive`
+
+**cdn**: https://esm.sh/ulive/fn
+
+**module**: https://esm.sh/ulive/fn?module
+
+```js
+import { o, effect, memo, batch, untracked } from "ulive/fn";
+
+const num = o(0);
+num(10);
+console.log(num());
+```
+
 
 ### signal(val)
 
 Create a reactive or live state.
 
 ```js
-import { signal, computed, memo, effect } from "ulive";
+import { signal, computed, effect } from "ulive";
 
 const num = signal(0);
 num.value = 10;

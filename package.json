@@ -1,44 +1,41 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"source": "src/index.js",
 	"type": "module",
 	"types": "dist/index.d.ts",
-	"main": "dist/ulive.js",
-	"module": "dist/ulive.es.js",
-	"unpkg": "dist/ulive.min.js",
-	"umd:main": "dist/ulive.umd.js",
-	"size-limit": [
-		{
-			"path": "dist/ulive.min.js",
-			"limit": "400 B"
-		}
-	],
+	"main": "dist/index.js",
+	"module": "dist/index.es.js",
+	"unpkg": "dist/index.min.js",
+	"umd:main": "dist/index.umd.js",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"browser": "./dist/ulive.es.js",
-			"umd": "./dist/ulive.umd.js",
-			"require": "./dist/ulive.js",
-			"import": "./dist/ulive.es.js",
-			"default": "./dist/ulive.es.js"
-		}
+			"browser": "./dist/index.es.js",
+			"umd": "./dist/index.umd.js",
+			"require": "./dist/index.js",
+			"import": "./dist/index.es.js",
+			"default": "./dist/index.es.js"
+		},
+		"./fn": {
+			"types": "./fn/index.d.ts",
+			"browser": "./fn/index.es.js",
+			"umd": "./fn/index.umd.js",
+			"require": "./fn/index.js",
+			"import": "./fn/index.es.js",
+			"default": "./fn/index.es.js"
+		},
+		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"test": "node src/test.js",
-		"copy:dts": "copyfiles -u 1 \"src/**/*.d.ts\" dist",
-		"size": "size-limit",
-		"rm": "sed -i 's/__proto__: null,//' dist/ulive.es.js",
-		"build": "npm run build:cjs && npm run build:es && npm run build:min && npm run build:umd && npm run build:esm && npm run copy:dts && npm run size",
-		"build:umd": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.umd.js --format umd --name ulive",
-		"build:min": "npm run rm && terser dist/ulive.es.js -o dist/ulive.min.js -c passes=3 --module --mangle-props reserved=[effect,o,computed,signal,batch,memo,untracked]",
-		"build:es": "rollup src/index.cjs -p @rollup/plugin-node-resolve --file dist/ulive.es.js --no-freeze --format esm",
-		"build:cjs": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.js --format cjs",
-		"build:esm": "rollup src/index.js -p @rollup/plugin-node-resolve --file dist/ulive.es.js --no-freeze --format esm"
+		"test": "node src/test.js && node src/test.fn.js",
+		"copy:dts": "copyfiles -u 1 \"src/**/*.d.ts\" dist && copyfiles -u 1 \"src/**/*.d.ts\" fn",
+		"build": "rollup --config rollup.config.js && npm run copy:dts"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"fn"
 	],
 	"devDependencies": {
 		"@rollup/plugin-node-resolve": "^14.0.1",

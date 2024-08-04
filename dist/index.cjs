@@ -4,12 +4,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 let current, batched;
 
-const share = (s) => {
+const sigShare = (s) => {
   s.toJSON = s.then = s.toString = s.valueOf = () => s.value;
   return s;
 };
 
-const signal = (v, s, obs = new Set) => share(
+const signal = (v, s, obs = new Set) => sigShare(
   {
     get value() {
       current?.deps.push(obs.add(current));
@@ -35,7 +35,7 @@ const effect = (fn, teardown, fx, deps) => (
   (dep) => { teardown?.call?.(); while (dep = deps.pop()) dep.delete(fx); }
 );
 
-const computed = (fn, s = signal(), c, e) => share(
+const computed = (fn, s = signal(), c, e) => sigShare(
   {
     get value() {
       e ||= effect(() => s.value = fn());

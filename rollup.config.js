@@ -4,7 +4,7 @@ const resolve = (pkg, input = "src/index", output = "dist/index") => ({
 	input: `${input}.js`,
 	output: [
 		{
-			file: `${output}.js`,
+			file: `${output}.es.js`,
 			format: 'es',
 		},
 		{
@@ -31,5 +31,6 @@ const resolve = (pkg, input = "src/index", output = "dist/index") => ({
 });
 
 export default [
-	resolve("ulive")
+	resolve("ulive"),
+	resolve("ulive", "src/fn", "fn/index")
 ]
