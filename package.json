@@ -38,14 +38,11 @@
 		"fn"
 	],
 	"devDependencies": {
-		"@rollup/plugin-node-resolve": "^14.0.1",
-		"@size-limit/file": "^8.1.0",
+		"@rollup/plugin-terser": "^0.4.4",
 		"copyfiles": "^2.4.1",
-		"rollup": "^2.79.0",
-		"size-limit": "^8.1.0",
+		"rollup": "^4.20.0",
 		"terser": "^5.15.0",
-		"tst": "^7.1.1",
-		"typescript": "^4.6.4"
+		"tst": "^7.1.1"
 	},
 	"repository": {
 		"type": "git",
