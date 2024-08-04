@@ -22,7 +22,7 @@
 
 This is function based signal.
 
-[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive/fn&treeshake=[*]&config={"compression":"brotli"})](https://unpkg.com/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive/fn&treeshake=[*]&config={"compression":"gzip"})](https://unpkg.com/ulive)
+[![Version](https://img.shields.io/npm/v/ulive.svg?color=success&style=flat-square)](https://www.npmjs.com/package/ulive) [![Badge size](https://deno.bundlejs.com/badge?q=ulive/fn&treeshake=[*]&config={"compression":"brotli"})](https://unpkg.com/ulive/fn) [![Badge size](https://deno.bundlejs.com/badge?q=ulive/fn&treeshake=[*]&config={"compression":"gzip"})](https://unpkg.com/ulive/fn)
 
 
 **yarn**: `yarn add ulive`
