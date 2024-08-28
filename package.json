@@ -4,17 +4,17 @@
 	"version": "1.0.6",
 	"source": "src/index.js",
 	"type": "module",
-	"types": "dist/index.d.ts",
-	"main": "dist/index.js",
-	"module": "dist/index.es.js",
-	"unpkg": "dist/index.min.js",
-	"umd:main": "dist/index.umd.js",
+	"types": "./dist/index.d.ts",
+	"main": "./dist/index.js",
+	"module": "./dist/index.es.js",
+	"unpkg": "./dist/index.min.js",
+	"umd:main": "./dist/index.umd.js",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
 			"browser": "./dist/index.es.js",
 			"umd": "./dist/index.umd.js",
-			"require": "./dist/index.js",
+			"require": "./dist/index.cjs",
 			"import": "./dist/index.es.js",
 			"default": "./dist/index.es.js"
 		},
@@ -22,7 +22,7 @@
 			"types": "./fn/index.d.ts",
 			"browser": "./fn/index.es.js",
 			"umd": "./fn/index.umd.js",
-			"require": "./fn/index.js",
+			"require": "./fn/index.cjs",
 			"import": "./fn/index.es.js",
 			"default": "./fn/index.es.js"
 		},
