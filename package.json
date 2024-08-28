@@ -1,11 +1,11 @@
 {
 	"name": "ulive",
 	"description": "Live reactive states",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"source": "src/index.js",
 	"type": "module",
 	"types": "./dist/index.d.ts",
-	"main": "./dist/index.js",
+	"main": "./dist/index.cjs",
 	"module": "./dist/index.es.js",
 	"unpkg": "./dist/index.min.js",
 	"umd:main": "./dist/index.umd.js",
