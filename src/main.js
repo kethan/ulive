@@ -1,12 +1,12 @@
 let current, batched;
 
 const sigShare = (s) => {
-  s.toJSON = s.then = s.toString = s.valueOf = () => s.value;
+  s.toJSON = s.toString = s.valueOf = () => s.value;
   return s;
 };
 
 const oShare = (s) => {
-  s.toJSON = s.then = s.toString = s.valueOf = () => s();
+  s.toJSON = s.toString = s.valueOf = () => s();
   return s;
 };
 
