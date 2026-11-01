@@ -95,6 +95,49 @@ let mul = computed(() => a.value * b.value);
 effect(() => untracked(() => console.log(a.value)));
 ```
 
+### batch(fn)
+
+Defer effects. Returns whatever `fn` returns; effects queued while flushing are
+still deduped, so an effect never runs twice for one batch. If `fn` throws, the
+pending effects are flushed and the error is re-thrown.
+
+```js
+const a = signal(0), b = signal(1);
+const mul = computed(() => a.value * b.value);
+effect(() => console.log(mul.value)); // 0
+batch(() => { a.value = 2; b.value = 3 }); // one log: 6
+```
+
+### untracked(fn)
+
+Run without effects. Returns the value of `fn`. Tracking is restored even when
+`fn` throws.
+
+```js
+const a = signal(0), b = signal(1);
+effect(() => untracked(() => console.log(a.value, b.value))); // never re-runs
+```
+
+### effect dispose
+
+`effect` returns a disposer. Calling it more than once is a no-op, and an effect
+disposed inside an open `batch` does not run when that batch flushes.
+
+```js
+const off = effect(() => console.log(num.value));
+off();
+```
+
+### Notes
+
+-   `peek()` never subscribes, and it initializes a `computed`/`memo` on first use.
+-   Reading a `computed`/`memo` from itself (directly or through a cycle) throws a
+    `RangeError` instead of overflowing the stack.
+-   Effects created inside an effect are not disposed automatically - return the
+    inner disposer as the teardown, otherwise every parent run adds a new one.
+-   A diamond (`a -> b, c -> d`) can notify an effect with an intermediate value
+    before it settles; wrap writes in `batch` and read the final value.
+
 ### toJSON or then or valueOf
 
 ```js
