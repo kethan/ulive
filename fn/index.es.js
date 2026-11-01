@@ -1,10 +1,9 @@
 let current, batched;
 
 const oShare = (s) => {
-  s.toJSON = s.then = s.toString = s.valueOf = () => s();
+  s.toJSON = s.toString = s.valueOf = s.then = (res) => res ? res(s()) : s();
   return s;
 };
-
 
 const o = (v, obs = new Set(), f) => oShare(
   f = (...next) => {
@@ -12,7 +11,7 @@ const o = (v, obs = new Set(), f) => oShare(
       current?.deps.push(obs.add(current));
       return v;
     }
-    if (v !== next[0]) {
+    if (!Object.is(v, next[0])) {
       v = next[0];
       for (let sub of obs) batched ? batched.add(sub) : sub(v);
     }
@@ -22,37 +21,60 @@ const o = (v, obs = new Set(), f) => oShare(
 
 const effect = (fn, teardown, fx, deps) => (
   fx = (prev) => {
+    if (!deps) return; // disposed (can still be queued by an open batch)
     teardown?.call?.();
     prev = current, current = fx;
     try { teardown = fn(); } finally { current = prev; }
   },
   deps = fx.deps = [],
   fx(),
-  (dep) => { teardown?.call?.(); while (dep = deps.pop()) dep.delete(fx); }
+  (dep) => {
+    if (deps) {
+      teardown?.call?.(), teardown = 0;
+      while (dep = deps.pop()) dep.delete(fx);
+      deps = 0;
+    }
+  }
 );
 
-const memo = (fn, s = o(), c, e) => oShare(
+const memo = (fn, s = o(), c, e, r) => oShare(
   c = (...next) => {
     if (!next.length) {
-      e ||= effect(() => s(fn()));
+      if (r) throw new RangeError('circular dependency');
+      if (!e) {
+        r = 1;
+        try { e = effect(() => s(fn())); } finally { r = 0; }
+      }
       return s();
     }
   },
-  c.peek = s.peek
+  // peek never subscribes, but still initializes
+  c.peek = () => untracked(() => c())
 );
 
-const batch = (fn) => {
-  let fxs = batched;
+const batch = (fn, fxs = batched, i = 0) => {
   if (!fxs) batched = new Set;
-  try { fn(); } finally {
+  try {
+    return fn();
+  } finally {
     if (!fxs) {
       fxs = batched;
-      batched = null;
-      for (const fx of fxs) fx();
+      try {
+        // keep batching while flushing, so effects queued by effects are deduped
+        // (iterating the live set also picks up effects queued during the flush)
+        for (const fx of fxs) {
+          if (++i > 1e3) throw new RangeError('depth');
+          fxs.delete(fx);
+          fx();
+        }
+      } finally { batched = null; }
     }
   }
 };
 
-const untracked = (fn, prev, v) => (prev = current, current = null, v = fn(), current = prev, v);
+const untracked = (fn, prev) => {
+  prev = current, current = null;
+  try { return fn(); } finally { current = prev; }
+};
 
 export { batch, effect, memo, o, untracked };
