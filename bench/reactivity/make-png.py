@@ -33,9 +33,13 @@ SHORT = {'ulive': 'ulive', 'ulive-lazy': 'ulive-pull', 'Preact Signals': 'Preact
          'uSignal': 'uSignal', 'alien-signals': 'alien'}
 
 
-def load(name):
-    with open(f'{DIR}/{name}') as fh:
-        return json.load(fh)
+def load(*names):
+    # the A/B run is checked in with its medians only (the full file is ~600 KB)
+    for name in names:
+        if os.path.exists(f'{DIR}/{name}'):
+            with open(f'{DIR}/{name}') as fh:
+                return json.load(fh)
+    raise SystemExit(f'none of {names} found in {DIR}')
 
 
 def group(rows):
@@ -150,7 +154,7 @@ class Page:
 
 def main():
     r3 = group(load('samples3.json')['rows'])
-    r2 = group(load('samples2.json')['rows'])
+    r2 = group(load('samples2.json', 'samples2-rows.json')['rows'])
 
     def med(vals):
         vals = sorted(vals)
@@ -171,7 +175,7 @@ def main():
         ('scenarios rejected', '0 / 51', 'was 3 / 51 before the fix'),
         ('ulive median', '51.6 ms', 'old core: 80.5 ms'),
         ('vs Preact', '2.30x', 'ahead on 7 of 49 scenarios'),
-        ('size, brotli', '617 B', 'was 490 B'),
+        ('size, brotli', '575 B', '490 B before redesign'),
     ])
 
     p.h2('Final standings — median of the 49 scenarios every build completes')

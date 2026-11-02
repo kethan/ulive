@@ -1,0 +1,1568 @@
+{
+ "note": "verification run after the size pass: 0 failures, same timings",
+ "semantics": "v4",
+ "profile": "quick",
+ "cpu": "Intel(R) Xeon(R) Processor @ 2.60GHz",
+ "cores": 2,
+ "node": "v22.22.3",
+ "rows": [
+  {
+   "id": "Preact Signals :: avoidablePropagation",
+   "framework": "Preact Signals",
+   "name": "avoidablePropagation",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.2171769999999782,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.21393800000001306,
+    "highMs": 0.22411799999997584
+   }
+  },
+  {
+   "id": "ulive :: avoidablePropagation",
+   "framework": "ulive",
+   "name": "avoidablePropagation",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1.379551499999991,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1.3673230000000558,
+    "highMs": 1.3982880000000364
+   }
+  },
+  {
+   "id": "ulive :: broadPropagation",
+   "framework": "ulive",
+   "name": "broadPropagation",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1.400020000000012,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1.3851289999999779,
+    "highMs": 1.418207999999936
+   }
+  },
+  {
+   "id": "Preact Signals :: broadPropagation",
+   "framework": "Preact Signals",
+   "name": "broadPropagation",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.3987045000000009,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.3896879999999783,
+    "highMs": 0.4056700000000433
+   }
+  },
+  {
+   "id": "Preact Signals :: deepPropagation",
+   "framework": "Preact Signals",
+   "name": "deepPropagation",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.13535950000002117,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.13241900000002715,
+    "highMs": 0.15001300000000128
+   }
+  },
+  {
+   "id": "ulive :: deepPropagation",
+   "framework": "ulive",
+   "name": "deepPropagation",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.5015409999999747,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.491107999999997,
+    "highMs": 0.5179830000000152
+   }
+  },
+  {
+   "id": "ulive :: diamond",
+   "framework": "ulive",
+   "name": "diamond",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.8591669999999851,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.8478320000000394,
+    "highMs": 0.8695730000000026
+   }
+  },
+  {
+   "id": "Preact Signals :: diamond",
+   "framework": "Preact Signals",
+   "name": "diamond",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.2553334999999919,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.24430300000000216,
+    "highMs": 0.26674400000001697
+   }
+  },
+  {
+   "id": "Preact Signals :: mux",
+   "framework": "Preact Signals",
+   "name": "mux",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.3888395000000173,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.3810149999999908,
+    "highMs": 0.40587899999999877
+   }
+  },
+  {
+   "id": "ulive :: mux",
+   "framework": "ulive",
+   "name": "mux",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1.4531695000000582,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1.436349000000007,
+    "highMs": 1.4758830000000103
+   }
+  },
+  {
+   "id": "ulive :: repeatedObservers",
+   "framework": "ulive",
+   "name": "repeatedObservers",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.11074600000002022,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.10733399999998028,
+    "highMs": 0.11735199999998258
+   }
+  },
+  {
+   "id": "Preact Signals :: repeatedObservers",
+   "framework": "Preact Signals",
+   "name": "repeatedObservers",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.03369049999997742,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.033340000000009695,
+    "highMs": 0.034348999999963326
+   }
+  },
+  {
+   "id": "Preact Signals :: triangle",
+   "framework": "Preact Signals",
+   "name": "triangle",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.08179250000000593,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.08139699999998129,
+    "highMs": 0.0830310000000054
+   }
+  },
+  {
+   "id": "ulive :: triangle",
+   "framework": "ulive",
+   "name": "triangle",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.31701000000001045,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.2965719999999692,
+    "highMs": 0.3290939999999978
+   }
+  },
+  {
+   "id": "ulive :: unstable",
+   "framework": "ulive",
+   "name": "unstable",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.19286700000000678,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.18631700000003093,
+    "highMs": 0.20173099999999522
+   }
+  },
+  {
+   "id": "Preact Signals :: unstable",
+   "framework": "Preact Signals",
+   "name": "unstable",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.0799675000000093,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.07859500000000708,
+    "highMs": 0.08249000000000706
+   }
+  },
+  {
+   "id": "Preact Signals :: manyEffectsFromOneSource",
+   "framework": "Preact Signals",
+   "name": "manyEffectsFromOneSource",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 244.14930449999997,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 238.93297600000005,
+    "highMs": 250.79092500000002
+   }
+  },
+  {
+   "id": "ulive :: manyEffectsFromOneSource",
+   "framework": "ulive",
+   "name": "manyEffectsFromOneSource",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 952.6231400000001,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 928.8225349999998,
+    "highMs": 1045.4080890000005
+   }
+  },
+  {
+   "id": "ulive :: manySourcesIntoOneComputedEffectWithDirect",
+   "framework": "ulive",
+   "name": "manySourcesIntoOneComputedEffectWithDirect",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 376.465596,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 369.8949600000001,
+    "highMs": 413.61443999999983
+   }
+  },
+  {
+   "id": "Preact Signals :: manySourcesIntoOneComputedEffectWithDirect",
+   "framework": "Preact Signals",
+   "name": "manySourcesIntoOneComputedEffectWithDirect",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 189.6743985,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 183.11952899999994,
+    "highMs": 207.246846
+   }
+  },
+  {
+   "id": "Preact Signals :: manySourcesIntoOneComputedEffect",
+   "framework": "Preact Signals",
+   "name": "manySourcesIntoOneComputedEffect",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 165.20592450000004,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 135.95320500000003,
+    "highMs": 183.2912789999998
+   }
+  },
+  {
+   "id": "ulive :: manySourcesIntoOneComputedEffect",
+   "framework": "ulive",
+   "name": "manySourcesIntoOneComputedEffect",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 354.90455799999995,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 350.71766400000024,
+    "highMs": 423.08179900000005
+   }
+  },
+  {
+   "id": "ulive :: manySourcesIntoOneDirectEffect",
+   "framework": "ulive",
+   "name": "manySourcesIntoOneDirectEffect",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 22.453516500000006,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 22.376942999999983,
+    "highMs": 22.617107000000033
+   }
+  },
+  {
+   "id": "Preact Signals :: manySourcesIntoOneDirectEffect",
+   "framework": "Preact Signals",
+   "name": "manySourcesIntoOneDirectEffect",
+   "validation": "passed",
+   "group": "push",
+   "family": "fan",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 29.197708000000034,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 28.584805000000017,
+    "highMs": 33.950738
+   }
+  },
+  {
+   "id": "Preact Signals :: molBench",
+   "framework": "Preact Signals",
+   "name": "molBench",
+   "validation": "passed",
+   "group": "dynamic",
+   "family": "object publication",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.06455300000000364,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.06330199999999309,
+    "highMs": 0.06611599999999385
+   }
+  },
+  {
+   "id": "ulive :: molBench",
+   "framework": "ulive",
+   "name": "molBench",
+   "validation": "passed",
+   "group": "dynamic",
+   "family": "object publication",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.1072030000000126,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.10539400000004662,
+    "highMs": 0.10873900000001413
+   }
+  },
+  {
+   "id": "ulive :: mutable-object/immutable replacement",
+   "framework": "ulive",
+   "name": "mutable-object/immutable replacement",
+   "validation": "passed",
+   "group": "dynamic",
+   "family": "object publication",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 2.725911999999994,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 2.5432710000000043,
+    "highMs": 2.792511000000019
+   }
+  },
+  {
+   "id": "Preact Signals :: mutable-object/immutable replacement",
+   "framework": "Preact Signals",
+   "name": "mutable-object/immutable replacement",
+   "validation": "passed",
+   "group": "dynamic",
+   "family": "object publication",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.9337864999999965,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.8928529999999455,
+    "highMs": 1.0430989999999838
+   }
+  },
+  {
+   "id": "Preact Signals :: mutable-object/in-place versioned",
+   "framework": "Preact Signals",
+   "name": "mutable-object/in-place versioned",
+   "validation": "passed",
+   "group": "dynamic",
+   "family": "object publication",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1.1422789999999878,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1.0959450000000004,
+    "highMs": 1.2991539999999873
+   }
+  },
+  {
+   "id": "ulive :: mutable-object/in-place versioned",
+   "framework": "ulive",
+   "name": "mutable-object/in-place versioned",
+   "validation": "passed",
+   "group": "dynamic",
+   "family": "object publication",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 3.158289999999994,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 2.93948400000005,
+    "highMs": 3.3127829999999676
+   }
+  },
+  {
+   "id": "ulive :: createDataSignals",
+   "framework": "ulive",
+   "name": "createDataSignals",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 8.95313299999998,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 8.10875500000003,
+    "highMs": 10.584390999999982
+   }
+  },
+  {
+   "id": "Preact Signals :: createDataSignals",
+   "framework": "Preact Signals",
+   "name": "createDataSignals",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 9.067217999999997,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 8.109140999999994,
+    "highMs": 10.108270000000005
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations0to1",
+   "framework": "Preact Signals",
+   "name": "createComputations0to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 21.63253850000001,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 15.898919000000092,
+    "highMs": 39.79618400000004
+   }
+  },
+  {
+   "id": "ulive :: createComputations0to1",
+   "framework": "ulive",
+   "name": "createComputations0to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 44.52211250000002,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 34.846960999999965,
+    "highMs": 63.603493999999955
+   }
+  },
+  {
+   "id": "ulive :: createComputations1to1",
+   "framework": "ulive",
+   "name": "createComputations1to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 72.29137550000007,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 70.28544999999986,
+    "highMs": 84.62345500000004
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations1to1",
+   "framework": "Preact Signals",
+   "name": "createComputations1to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 30.093216499999954,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 24.916404,
+    "highMs": 38.194976
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations2to1",
+   "framework": "Preact Signals",
+   "name": "createComputations2to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 26.258916500000026,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 21.091688999999974,
+    "highMs": 27.72607299999993
+   }
+  },
+  {
+   "id": "ulive :: createComputations2to1",
+   "framework": "ulive",
+   "name": "createComputations2to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 71.17664450000007,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 55.311293999999975,
+    "highMs": 77.02292599999987
+   }
+  },
+  {
+   "id": "ulive :: createComputations4to1",
+   "framework": "ulive",
+   "name": "createComputations4to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 54.254390500000056,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 40.610847999999805,
+    "highMs": 61.79055600000004
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations4to1",
+   "framework": "Preact Signals",
+   "name": "createComputations4to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 20.81196299999999,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 18.815290000000005,
+    "highMs": 25.23528299999998
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations1000to1",
+   "framework": "Preact Signals",
+   "name": "createComputations1000to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 12.003142000000025,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 11.731043999999997,
+    "highMs": 12.782105000000001
+   }
+  },
+  {
+   "id": "ulive :: createComputations1000to1",
+   "framework": "ulive",
+   "name": "createComputations1000to1",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 31.2009525,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 29.551127000000065,
+    "highMs": 35.44356699999997
+   }
+  },
+  {
+   "id": "ulive :: createComputations1to2",
+   "framework": "ulive",
+   "name": "createComputations1to2",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 70.52811749999995,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 62.53026,
+    "highMs": 81.68266699999981
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations1to2",
+   "framework": "Preact Signals",
+   "name": "createComputations1to2",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 26.454128999999995,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 21.64115700000002,
+    "highMs": 32.011571
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations1to4",
+   "framework": "Preact Signals",
+   "name": "createComputations1to4",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 25.218538500000022,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 22.026279000000045,
+    "highMs": 26.776273000000003
+   }
+  },
+  {
+   "id": "ulive :: createComputations1to4",
+   "framework": "ulive",
+   "name": "createComputations1to4",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 54.546222500000056,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 49.61160300000006,
+    "highMs": 59.47664999999995
+   }
+  },
+  {
+   "id": "ulive :: createComputations1to8",
+   "framework": "ulive",
+   "name": "createComputations1to8",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 74.81802249999993,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 63.26664800000003,
+    "highMs": 88.19216600000004
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations1to8",
+   "framework": "Preact Signals",
+   "name": "createComputations1to8",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 30.056301500000018,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 24.536731999999915,
+    "highMs": 64.53500299999996
+   }
+  },
+  {
+   "id": "Preact Signals :: createComputations1to1000",
+   "framework": "Preact Signals",
+   "name": "createComputations1to1000",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 71.43507700000009,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 61.00920899999994,
+    "highMs": 89.508488
+   }
+  },
+  {
+   "id": "ulive :: createComputations1to1000",
+   "framework": "ulive",
+   "name": "createComputations1to1000",
+   "validation": "passed",
+   "group": "creation",
+   "family": "initialized construction",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 87.55172700000008,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 81.35037999999986,
+    "highMs": 99.80493700000011
+   }
+  },
+  {
+   "id": "ulive :: updateComputations1to1",
+   "framework": "ulive",
+   "name": "updateComputations1to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 78.62415300000004,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 77.08617200000003,
+    "highMs": 81.661833
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations1to1",
+   "framework": "Preact Signals",
+   "name": "updateComputations1to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 26.428854000000015,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 20.847410000000025,
+    "highMs": 34.310496
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations2to1",
+   "framework": "Preact Signals",
+   "name": "updateComputations2to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 17.326846000000018,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 16.45616000000001,
+    "highMs": 18.906710000000032
+   }
+  },
+  {
+   "id": "ulive :: updateComputations2to1",
+   "framework": "ulive",
+   "name": "updateComputations2to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 50.59354349999998,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 47.49521399999992,
+    "highMs": 51.975032
+   }
+  },
+  {
+   "id": "ulive :: updateComputations4to1",
+   "framework": "ulive",
+   "name": "updateComputations4to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 34.08535250000003,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 32.565285999999986,
+    "highMs": 35.29960199999999
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations4to1",
+   "framework": "Preact Signals",
+   "name": "updateComputations4to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 13.86220499999996,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 12.784301999999968,
+    "highMs": 14.823141000000021
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations1000to1",
+   "framework": "Preact Signals",
+   "name": "updateComputations1000to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 19.283168999999987,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 18.970496999999966,
+    "highMs": 20.385415999999992
+   }
+  },
+  {
+   "id": "ulive :: updateComputations1000to1",
+   "framework": "ulive",
+   "name": "updateComputations1000to1",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 71.416112,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 70.02554100000009,
+    "highMs": 72.79235900000003
+   }
+  },
+  {
+   "id": "ulive :: updateComputations1to2",
+   "framework": "ulive",
+   "name": "updateComputations1to2",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 65.35719899999998,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 62.23305699999992,
+    "highMs": 67.59960400000006
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations1to2",
+   "framework": "Preact Signals",
+   "name": "updateComputations1to2",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 20.443558999999993,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 18.449164999999994,
+    "highMs": 25.30689799999999
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations1to4",
+   "framework": "Preact Signals",
+   "name": "updateComputations1to4",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 18.853876999999954,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 17.074771,
+    "highMs": 20.801920999999993
+   }
+  },
+  {
+   "id": "ulive :: updateComputations1to4",
+   "framework": "ulive",
+   "name": "updateComputations1to4",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 51.49333599999994,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 49.47341599999993,
+    "highMs": 53.540302999999994
+   }
+  },
+  {
+   "id": "ulive :: updateComputations1to1000",
+   "framework": "ulive",
+   "name": "updateComputations1to1000",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 50.34736300000003,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 47.201955999999996,
+    "highMs": 51.15466700000002
+   }
+  },
+  {
+   "id": "Preact Signals :: updateComputations1to1000",
+   "framework": "Preact Signals",
+   "name": "updateComputations1to1000",
+   "validation": "passed",
+   "group": "update",
+   "family": "write and pull",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 16.49360999999999,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 15.731189000000029,
+    "highMs": 19.67727400000001
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/dashboard selective reads",
+   "framework": "Preact Signals",
+   "name": "dynamic/dashboard selective reads",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1107.0277175,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1057.62061,
+    "highMs": 1141.8441109999994
+   }
+  },
+  {
+   "id": "ulive :: dynamic/dashboard selective reads",
+   "framework": "ulive",
+   "name": "dynamic/dashboard selective reads",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 904.3645174999999,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 862.2744309999998,
+    "highMs": 1013.6539389999998
+   }
+  },
+  {
+   "id": "ulive :: dynamic/editor derived state",
+   "framework": "ulive",
+   "name": "dynamic/editor derived state",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1332.9787560000009,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1261.0143349999998,
+    "highMs": 1399.6138769999998
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/editor derived state",
+   "framework": "Preact Signals",
+   "name": "dynamic/editor derived state",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 937.1059799999998,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 898.2243019999996,
+    "highMs": 955.532831
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/kanban board",
+   "framework": "Preact Signals",
+   "name": "dynamic/kanban board",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 917.1724824999999,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 884.9186529999997,
+    "highMs": 989.6970460000002
+   }
+  },
+  {
+   "id": "ulive :: dynamic/kanban board",
+   "framework": "ulive",
+   "name": "dynamic/kanban board",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 950.3961355000006,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 943.3921870000004,
+    "highMs": 958.332566
+   }
+  },
+  {
+   "id": "ulive :: dynamic/entity detail page",
+   "framework": "ulive",
+   "name": "dynamic/entity detail page",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1463.7124194999997,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1428.2975780000006,
+    "highMs": 1493.771795999999
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/entity detail page",
+   "framework": "Preact Signals",
+   "name": "dynamic/entity detail page",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 880.879044,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 849.3437430000004,
+    "highMs": 1012.4288840000004
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/layered full-drain cold",
+   "framework": "Preact Signals",
+   "name": "dynamic/layered full-drain cold",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "layered-dag",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 180.08437400000003,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 149.18590599999993,
+    "highMs": 292.87472
+   }
+  },
+  {
+   "id": "ulive :: dynamic/layered full-drain cold",
+   "framework": "ulive",
+   "name": "dynamic/layered full-drain cold",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "layered-dag",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 258.70482949999985,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 224.46688900000004,
+    "highMs": 293.5581339999999
+   }
+  },
+  {
+   "id": "ulive :: dynamic/layered full-drain warm",
+   "framework": "ulive",
+   "name": "dynamic/layered full-drain warm",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "layered-dag",
+   "fixture": "warm-reused",
+   "capped": false,
+   "estimateMs": 229.64001800000005,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 195.00891699999966,
+    "highMs": 240.9162879999999
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/layered full-drain warm",
+   "framework": "Preact Signals",
+   "name": "dynamic/layered full-drain warm",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "layered-dag",
+   "fixture": "warm-reused",
+   "capped": false,
+   "estimateMs": 313.87406050000027,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 278.56856100000005,
+    "highMs": 368.71558300000015
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/layered burst flush warm",
+   "framework": "Preact Signals",
+   "name": "dynamic/layered burst flush warm",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "layered-dag",
+   "fixture": "warm-reused",
+   "capped": false,
+   "estimateMs": 727.1467575000006,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 650.7905989999999,
+    "highMs": 814.2214140000006
+   }
+  },
+  {
+   "id": "ulive :: dynamic/stable diamond mesh warm",
+   "framework": "ulive",
+   "name": "dynamic/stable diamond mesh warm",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "diamond-mesh",
+   "fixture": "warm-reused",
+   "capped": false,
+   "estimateMs": 15.665928000000008,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 15.440538999999944,
+    "highMs": 15.996121000000016
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/stable diamond mesh warm",
+   "framework": "Preact Signals",
+   "name": "dynamic/stable diamond mesh warm",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "diamond-mesh",
+   "fixture": "warm-reused",
+   "capped": false,
+   "estimateMs": 142.3894415000001,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 135.99149599999987,
+    "highMs": 149.44325800000001
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/pure pull",
+   "framework": "Preact Signals",
+   "name": "dynamic/pure pull",
+   "validation": "passed",
+   "group": "pull",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.9314514999999943,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.8384389999999939,
+    "highMs": 1.0337650000000167
+   }
+  },
+  {
+   "id": "ulive :: dynamic/pure pull",
+   "framework": "ulive",
+   "name": "dynamic/pure pull",
+   "validation": "passed",
+   "group": "pull",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 1.2512979999999914,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 1.0526170000000548,
+    "highMs": 1.389312000000018
+   }
+  },
+  {
+   "id": "ulive :: dynamic/pure push",
+   "framework": "ulive",
+   "name": "dynamic/pure push",
+   "validation": "passed",
+   "group": "push",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 394.37360050000007,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 381.0949519999999,
+    "highMs": 410.0520839999999
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/pure push",
+   "framework": "Preact Signals",
+   "name": "dynamic/pure push",
+   "validation": "passed",
+   "group": "push",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 209.06371549999994,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 192.52639399999998,
+    "highMs": 222.69645600000013
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/simple component",
+   "framework": "Preact Signals",
+   "name": "dynamic/simple component",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 471.89165850000006,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 460.24101999999993,
+    "highMs": 486.60732599999983
+   }
+  },
+  {
+   "id": "ulive :: dynamic/simple component",
+   "framework": "ulive",
+   "name": "dynamic/simple component",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 700.6474600000001,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 689.7510689999999,
+    "highMs": 717.2556770000001
+   }
+  },
+  {
+   "id": "ulive :: dynamic/dynamic component",
+   "framework": "ulive",
+   "name": "dynamic/dynamic component",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 698.2191115000005,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 656.3754799999997,
+    "highMs": 722.4688230000002
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/dynamic component",
+   "framework": "Preact Signals",
+   "name": "dynamic/dynamic component",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 269.5999515,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 260.5405400000001,
+    "highMs": 282.8234369999998
+   }
+  },
+  {
+   "id": "ulive :: dynamic/large web app",
+   "framework": "ulive",
+   "name": "dynamic/large web app",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 775.1503040000002,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 764.7054190000008,
+    "highMs": 805.824584
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/deep",
+   "framework": "Preact Signals",
+   "name": "dynamic/deep",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 211.56849499999998,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 202.84755000000007,
+    "highMs": 225.04299400000014
+   }
+  },
+  {
+   "id": "ulive :: dynamic/deep",
+   "framework": "ulive",
+   "name": "dynamic/deep",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 512.5076615000003,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 508.9150759999998,
+    "highMs": 552.3494220000002
+   }
+  },
+  {
+   "id": "ulive :: cellx1000",
+   "framework": "ulive",
+   "name": "cellx1000",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 5.769565,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 5.6785240000000385,
+    "highMs": 5.834437999999977
+   }
+  },
+  {
+   "id": "Preact Signals :: cellx1000",
+   "framework": "Preact Signals",
+   "name": "cellx1000",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 0.9834614999999758,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 0.9075479999999629,
+    "highMs": 1.0212740000000622
+   }
+  },
+  {
+   "id": "Preact Signals :: cellx2500",
+   "framework": "Preact Signals",
+   "name": "cellx2500",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 2.455569999999966,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 2.3580759999999827,
+    "highMs": 2.560113999999885
+   }
+  },
+  {
+   "id": "ulive :: cellx2500",
+   "framework": "ulive",
+   "name": "cellx2500",
+   "validation": "passed",
+   "group": "baseline",
+   "family": "historical propagation",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 21.350347499999998,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 20.06518099999994,
+    "highMs": 21.893574
+   }
+  },
+  {
+   "id": "ulive :: dynamic/layered burst flush warm",
+   "framework": "ulive",
+   "name": "dynamic/layered burst flush warm",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "layered-dag",
+   "fixture": "warm-reused",
+   "capped": true,
+   "estimateMs": 2495.7847379999994
+  },
+  {
+   "id": "Preact Signals :: dynamic/large web app",
+   "framework": "Preact Signals",
+   "name": "dynamic/large web app",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": true,
+   "estimateMs": 4061.817524
+  },
+  {
+   "id": "ulive :: dynamic/wide dense",
+   "framework": "ulive",
+   "name": "dynamic/wide dense",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 2151.9863620000006,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 2107.2741459999997,
+    "highMs": 2262.675776
+   }
+  },
+  {
+   "id": "Preact Signals :: dynamic/wide dense",
+   "framework": "Preact Signals",
+   "name": "dynamic/wide dense",
+   "validation": "passed",
+   "group": "large_graph",
+   "family": "rect",
+   "fixture": "fresh",
+   "capped": false,
+   "estimateMs": 2908.292766499999,
+   "interval": {
+    "kind": "median-order-statistic-95",
+    "lowMs": 2560.826132,
+    "highMs": 3172.441096999999
+   }
+  }
+ ]
+}

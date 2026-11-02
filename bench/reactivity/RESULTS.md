@@ -169,8 +169,8 @@ Both ulive builds measured in one interleaved pass, so the comparison is apples 
 
 | | eager `5cef7c3` | pull-based `8b97cfe` |
 |---|---:|---:|
-| `dist` min+gz (ulive flavour) | 1084 raw / 544 gzip / **490 brotli** | 1355 raw / 663 gzip / **617 brotli** |
-| `fn` flavour | 833 / 484 / **460** brotli | 1156 / 615 / **575** brotli |
+| `dist` min+gz (ulive flavour) | 1084 raw / 544 gzip / **490 brotli** | 1355 / 663 / **617** → after the size pass **1175 / 612 / 575** |
+| `fn` flavour | 833 / 484 / **460** brotli | 1156 / 615 / **575** → after the size pass **1070 / 578 / 547** |
 | own test suite | 181 / 176 pass / 5 skip | 181 / 176 pass / 5 skip |
 | scenarios rejected by the harness | 3 of 51 | **0 of 51** |
 
@@ -191,6 +191,35 @@ noise of each other, and both stay near plain DOM: `create 1k rows` 41.4 → 44�
 `update every 10th row` 0.76 → 0.72–0.84 (vanilla 0.64), `create 10k rows` 492 → 432–646,
 `clear 1k rows` 3.1 → 2.9–5.8. Where this change costs, it costs on *tiny* graphs, and a DOM row is
 a tiny graph.
+
+## The size pass, after the numbers above were taken
+
+The pull-based core cost +266 B raw over the eager one, so it got its own measured pass
+(`9f31fe4`). Every step was kept only if the two test suites, the signal-level benchmarks and this
+harness all stayed green:
+
+| step | raw | gzip | brotli |
+|---|---:|---:|---:|
+| pull-based core as first written | 1355 | 663 | 617 |
+| one class (a computed is a signal with a producer) | 1185 | 621 | 580 |
+| one `exec` for producers and effects | 1230 | 640 | 597 |
+| `effect()` stops allocating a Set that `exec` replaced | 1218 | 635 | 592 |
+| `peek()` reads through the getter (no per-class override) | 1218 | 635 | 592 |
+| queue item as a parameter, disposer as one expression | 1182 | 620 | 578 |
+| terser `passes: 3` | **1175** | **612** | **575** |
+
+Final: **1175 raw / 612 gzip / 575 brotli** (from 1355 / 663 / 617), `fn` flavour
+**1070 / 578 / 547** (from 1156 / 615 / 575) — a **13.3% / 7.7% / 6.8%** cut for the object
+flavour. Speed is unchanged: five rounds of `../bench.mjs` put every scenario within noise of the
+previous build (0.88–1.17×), and this harness re-ran with 0 failures.
+
+Two tempting changes were measured and **rejected**:
+
+* `delete fx.f` on dispose instead of `fx.f = 0` saved 9 B but forces V8 into dictionary mode:
+  `create+dispose 100k effects` went 30 → 65 ms (2.1×).
+* dropping the dependency pruning in favour of "unsubscribe everything, let tracking re-subscribe"
+  saved 34 B raw / 22 B brotli but cost 17–49% on `1 effect × 100k writes`, `100 effects × 10k`,
+  the computed chain and the diamond.
 
 ## Caveats
 
@@ -214,3 +243,4 @@ a tiny graph.
 | `table.mjs` | `node table.mjs [samples3.json]` prints the markdown table (`--write` saves it) |
 | `glitch.mjs` | the 20-line proof that an eager computed recomputes once per path |
 | `ulive-pull-core.js` | the pull-based core as benchmarked, merged into ulive's `src/main.js` in `8b97cfe` (README in `f655a10`) |
+| `samples4-verify.json`, `run4.log` | re-run after the size pass (`9f31fe4`): ulive vs Preact, **0 failures**, same timings |

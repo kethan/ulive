@@ -4,8 +4,10 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const dir = dirname(fileURLToPath(import.meta.url));
-const run3 = JSON.parse(fs.readFileSync(`${dir}/samples3.json`, 'utf8'));
-const run2 = JSON.parse(fs.readFileSync(`${dir}/samples2.json`, 'utf8'));
+// the A/B run is checked in with its medians only (the full file is ~600 KB)
+const pick = (...names) => names.map((n) => `${dir}/${n}`).find((f) => fs.existsSync(f));
+const run3 = JSON.parse(fs.readFileSync(pick('samples3.json'), 'utf8'));
+const run2 = JSON.parse(fs.readFileSync(pick('samples2.json', 'samples2-rows.json'), 'utf8'));
 
 const ORDER = ['ulive', 'ulive-lazy', 'Preact Signals', 'uSignal', 'alien-signals'];
 const SHORT = { ulive: 'ulive', 'ulive-lazy': 'ulive (pull proto)', 'Preact Signals': 'Preact', uSignal: 'uSignal', 'alien-signals': 'alien' };
@@ -98,7 +100,7 @@ Xeon @ 2.60 GHz, 2 cores · Node v22.22.3 · ${paired3.length} scenarios compare
   <div class="card"><div class="k">scenarios rejected</div><div class="v win">0 / 51</div><div class="k">was 3 / 51 before this change</div></div>
   <div class="card"><div class="k">ulive median</div><div class="v">51.6 ms</div><div class="k">old core: 80.5 ms</div></div>
   <div class="card"><div class="k">vs Preact Signals</div><div class="v">2.30×</div><div class="k">ahead on 7 of 49</div></div>
-  <div class="card"><div class="k">size (brotli)</div><div class="v">617 B</div><div class="k">was 490 B</div></div>
+  <div class="card"><div class="k">size (brotli)</div><div class="v">575 B</div><div class="k">490 B before the redesign</div></div>
 </div>
 
 <h2>The final standings</h2>
@@ -149,8 +151,8 @@ running joins that flush instead of recursing into it.</p>
 <div class="scroll"><table>
 <thead><tr><th class="n"></th><th>eager <code>5cef7c3</code></th><th>pull-based <code>8b97cfe</code></th></tr></thead>
 <tbody>
-<tr><th class="n">ulive flavour, min+gz</th><td>1084 raw / 544 gz / 490 brotli</td><td class="best">1355 raw / 663 gz / 617 brotli</td></tr>
-<tr><th class="n">fn flavour</th><td>833 raw / 484 gz / 460 brotli</td><td class="best">1156 raw / 615 gz / 575 brotli</td></tr>
+<tr><th class="n">ulive flavour, min+gz</th><td>1084 raw / 544 gz / 490 brotli</td><td class="best">1175 raw / 612 gz / 575 brotli</td></tr>
+<tr><th class="n">fn flavour</th><td>833 raw / 484 gz / 460 brotli</td><td class="best">1070 raw / 578 gz / 547 brotli</td></tr>
 <tr><th class="n">own test suite</th><td>181 / 176 pass / 5 skip</td><td>181 / 176 pass / 5 skip</td></tr>
 <tr><th class="n">scenarios rejected</th><td class="fail">3 of 51</td><td class="best">0 of 51</td></tr>
 <tr><th class="n">1 effect × 100k writes</th><td class="best">11.8 ms</td><td>29.3 ms</td></tr>
