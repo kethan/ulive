@@ -138,10 +138,13 @@ off();
     tree, a list that renders lists) therefore does not fan out inside one write.
 -   Effects created inside an effect are not disposed automatically - return the
     inner disposer as the teardown, otherwise every parent run adds a new one.
--   A diamond (`a -> b, c -> d`) can notify an effect with an intermediate value
-    before it settles; wrap writes in `batch` and read the final value.
--   Dependencies are collected per effect and only dropped on dispose: an effect that
-    stops reading a signal behind a false condition stays subscribed to it.
+-   A write marks the nodes that read it dirty; `computed`/`memo` recompute when they
+    are read. A diamond (`a -> b, c -> d`) therefore recomputes `d` once per write and
+    its effect runs once, with the settled value - no intermediate state is delivered.
+-   Because of that, an error thrown inside a `computed`/`memo` surfaces when its value
+    is read, not when the signal it reads is written.
+-   Dependencies are re-collected on every run, so an effect that stops reading a signal
+    behind a false condition also stops listening to it.
 
 ### toJSON or then or valueOf
 
