@@ -17,7 +17,7 @@ const resolve = (pkg, input = "src/index", output = "dist/index") => ({
 			name: pkg,
 			strict: false,
 			compact: true,
-			plugins: [terser()]
+			plugins: [terser({ compress: { passes: 3 } })]
 		},
 		{
 			file: `${output}.umd.js`,
@@ -25,7 +25,7 @@ const resolve = (pkg, input = "src/index", output = "dist/index") => ({
 			name: pkg,
 			strict: false,
 			compact: true,
-			plugins: [terser()]
+			plugins: [terser({ compress: { passes: 3 } })]
 		}
 	]
 });

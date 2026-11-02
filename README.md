@@ -95,6 +95,57 @@ let mul = computed(() => a.value * b.value);
 effect(() => untracked(() => console.log(a.value)));
 ```
 
+### batch(fn)
+
+Defer effects. Returns whatever `fn` returns; effects queued while flushing are
+still deduped, so an effect never runs twice for one batch. If `fn` throws, the
+pending effects are flushed and the error is re-thrown.
+
+```js
+const a = signal(0), b = signal(1);
+const mul = computed(() => a.value * b.value);
+effect(() => console.log(mul.value)); // 0
+batch(() => { a.value = 2; b.value = 3 }); // one log: 6
+```
+
+### untracked(fn)
+
+Run without effects. Returns the value of `fn`. Tracking is restored even when
+`fn` throws.
+
+```js
+const a = signal(0), b = signal(1);
+effect(() => untracked(() => console.log(a.value, b.value))); // never re-runs
+```
+
+### effect dispose
+
+`effect` returns a disposer. Calling it more than once is a no-op, and an effect
+disposed inside an open `batch` does not run when that batch flushes.
+
+```js
+const off = effect(() => console.log(num.value));
+off();
+```
+
+### Notes
+
+-   `peek()` never subscribes, and it initializes a `computed`/`memo` on first use.
+-   Reading a `computed`/`memo` from itself (directly or through a cycle) throws an
+    `Error('circular')` instead of overflowing the stack.
+-   A write only notifies the effects that were already subscribed when it started.
+    An effect that subscribes another effect to the same signal (a nested component
+    tree, a list that renders lists) therefore does not fan out inside one write.
+-   Effects created inside an effect are not disposed automatically - return the
+    inner disposer as the teardown, otherwise every parent run adds a new one.
+-   A write marks the nodes that read it dirty; `computed`/`memo` recompute when they
+    are read. A diamond (`a -> b, c -> d`) therefore recomputes `d` once per write and
+    its effect runs once, with the settled value - no intermediate state is delivered.
+-   Because of that, an error thrown inside a `computed`/`memo` surfaces when its value
+    is read, not when the signal it reads is written.
+-   Dependencies are re-collected on every run, so an effect that stops reading a signal
+    behind a false condition also stops listening to it.
+
 ### toJSON or then or valueOf
 
 ```js

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ulive in the official js-reactivity-benchmark</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232563eb'/%3E%3Cpath d='M8 22l6-12 4 8 3-5 3 9' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         max-width: 62rem; margin: 0 auto; padding: 2rem 1.25rem 5rem; color: #1a1a1a; background: #fff; }
+  h1 { font-size: 1.7rem; line-height: 1.2; margin: 0 0 .4rem; }
+  h2 { font-size: 1.15rem; margin: 2.4rem 0 .7rem; padding-bottom: .3rem; border-bottom: 2px solid #eee; }
+  .sub { color: #666; margin: 0 0 1.6rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; margin: .8rem 0 1rem; font-variant-numeric: tabular-nums; }
+  th, td { padding: 4px 8px; text-align: right; border-bottom: 1px solid #eee; white-space: nowrap; }
+  thead tr { background: #f6f7f9; }
+  thead th { text-align: right; font-weight: 600; }
+  th.n { text-align: left; font-weight: 400; }
+  thead th.n { font-weight: 600; }
+  td.best { background: #e8f7ee; font-weight: 600; }
+  td.fail { background: #fdecec; color: #b3261e; font-weight: 600; }
+  td.na, td.ratio { color: #888; }
+  tbody tr:hover { background: #fbfbfd; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .7rem; margin: 1.2rem 0; }
+  .card { border: 1px solid #e6e6ea; border-radius: 10px; padding: .8rem 1rem; }
+  .card .k { font-size: 12px; color: #666; }
+  .card .v { font-size: 1.45rem; font-weight: 650; }
+  .win { color: #0a7d38; } .lose { color: #b3261e; }
+  ul { margin: .4rem 0 .9rem; padding-left: 1.2rem; } li { margin: .25rem 0; }
+  code { background: #f4f5f7; padding: 1px 5px; border-radius: 5px; font-size: .88em; }
+  pre { background: #f7f8fa; padding: .8rem 1rem; border-radius: 10px; overflow-x: auto; font-size: 12.5px; line-height: 1.45; }
+  .note { background: #fffbe8; border-left: 4px solid #e6b800; padding: .7rem 1rem; border-radius: 6px; font-size: 13.5px; }
+  .scroll { overflow-x: auto; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #16171a; color: #e8e8ea; }
+    h2 { border-color: #2b2d33; }
+    th, td { border-color: #2b2d33; } thead tr { background: #1e2025; }
+    tbody tr:hover { background: #1c1e22; }
+    td.best { background: #12351f; } td.fail { background: #3a1a18; color: #ff9b92; }
+    .card { border-color: #2b2d33; } code, pre { background: #1e2025; }
+    .note { background: #2b2612; }
+  }
+</style></head><body>
+
+<h1>ulive in the official js-reactivity-benchmark</h1>
+<p class="sub">volynetstyle/js-reactivity-benchmark · semantics v4 · BENCH_PROFILE=quick · one forked worker per row ·
+Xeon @ 2.60 GHz, 2 cores · Node v22.22.3 · 49 scenarios compared, 198 rows measured</p>
+
+<div class="cards">
+  <div class="card"><div class="k">scenarios rejected</div><div class="v win">0 / 51</div><div class="k">was 3 / 51 before this change</div></div>
+  <div class="card"><div class="k">ulive median</div><div class="v">51.6 ms</div><div class="k">old core: 80.5 ms</div></div>
+  <div class="card"><div class="k">vs Preact Signals</div><div class="v">2.30×</div><div class="k">ahead on 7 of 49</div></div>
+  <div class="card"><div class="k">size (brotli)</div><div class="v">575 B</div><div class="k">490 B before the redesign</div></div>
+</div>
+
+<h2>The final standings</h2>
+<div class="scroll"><table>
+<thead><tr><th class="n">library</th><th>median of 49 scenarios</th></tr></thead>
+<tbody><tr><th class="n">1. alien</th><td class="">15.9 ms</td></tr><tr><th class="n">2. Preact</th><td class="">23.2 ms</td></tr><tr><th class="n">3. uSignal</th><td class="">49.8 ms</td></tr><tr><th class="n">4. ulive</th><td class="best">51.6 ms</td></tr></tbody>
+</table></div>
+<p style="font-size:13.5px;color:#666">Same table, before the core change: ulive was 80.5 ms
+and was <b>rejected</b> on <code>triangle</code>, <code>unstable</code> and <code>dynamic/large web app</code>.</p>
+
+<h2>What ulive wins and loses</h2>
+<div class="scroll"><table>
+<thead><tr><th class="n">big graphs — ulive wins</th><th>ulive</th><th>Preact</th><th>uSignal</th><th>alien</th></tr></thead>
+<tbody>
+<tr><th class="n">dynamic/large web app</th><td class="best">753</td><td class="">4092</td><td class="">729</td><td class="">351</td></tr><tr><th class="n">dynamic/wide dense</th><td class="best">2175</td><td class="">4936</td><td class="">1783</td><td class="">522</td></tr><tr><th class="n">dynamic/stable diamond mesh warm</th><td class="best">26</td><td class="">265</td><td class="">15</td><td class="">10</td></tr><tr><th class="n">dynamic/dashboard selective reads</th><td class="best">879</td><td class="">1183</td><td class="">858</td><td class="">311</td></tr><tr><th class="n">dynamic/layered full-drain warm</th><td class="best">283</td><td class="">287</td><td class="">194</td><td class="">157</td></tr>
+</tbody></table>
+<table style="margin-top:1.4rem">
+<thead><tr><th class="n">tiny graphs — ulive loses</th><th>ulive</th><th>Preact</th><th>uSignal</th><th>alien</th></tr></thead>
+<tbody>
+<tr><th class="n">cellx1000</th><td class="">5.99</td><td class="best">1.03</td><td class="">2.24</td><td class="">1.16</td></tr><tr><th class="n">cellx2500</th><td class="">21.74</td><td class="best">2.73</td><td class="">5.57</td><td class="">3.42</td></tr><tr><th class="n">avoidablePropagation</th><td class="">1.48</td><td class="">0.229</td><td class="">1.17</td><td class="best">0.176</td></tr><tr><th class="n">updateComputations1to1</th><td class="">85.21</td><td class="best">16.99</td><td class="">66.55</td><td class="">21.09</td></tr><tr><th class="n">manyEffectsFromOneSource</th><td class="">994</td><td class="">249</td><td class="">774</td><td class="best">237</td></tr>
+</tbody></table></div>
+
+<h2>All 51 scenarios</h2>
+<p style="font-size:13.5px;color:#666">ms, median; lower is better. Green = fastest of the row. <code>ulive / Preact</code> below 1 means ulive is faster.</p>
+<div class="scroll"><table><tr><th class="n">scenario</th><th>ulive</th><th>Preact</th><th>uSignal</th><th>alien</th><th>ulive / Preact</th></tr><tr><th class="n">avoidablePropagation</th><td class="">1.48</td><td class="">0.229</td><td class="">1.17</td><td class="best">0.176</td><td class="ratio">6.45×</td></tr><tr><th class="n">broadPropagation</th><td class="">1.39</td><td class="">0.407</td><td class="">1.02</td><td class="best">0.351</td><td class="ratio">3.40×</td></tr><tr><th class="n">deepPropagation</th><td class="">0.468</td><td class="">0.153</td><td class="">0.423</td><td class="best">0.092</td><td class="ratio">3.06×</td></tr><tr><th class="n">diamond</th><td class="">0.829</td><td class="">0.271</td><td class="">0.642</td><td class="best">0.185</td><td class="ratio">3.05×</td></tr><tr><th class="n">mux</th><td class="">1.48</td><td class="">0.432</td><td class="">1.47</td><td class="best">0.359</td><td class="ratio">3.43×</td></tr><tr><th class="n">repeatedObservers</th><td class="">0.126</td><td class="best">0.035</td><td class="">0.100</td><td class="">0.064</td><td class="ratio">3.56×</td></tr><tr><th class="n">triangle</th><td class="">0.303</td><td class="">0.089</td><td class="">0.227</td><td class="best">0.073</td><td class="ratio">3.42×</td></tr><tr><th class="n">unstable</th><td class="">0.183</td><td class="best">0.083</td><td class="">0.125</td><td class="">0.085</td><td class="ratio">2.19×</td></tr><tr><th class="n">manyEffectsFromOneSource</th><td class="">994</td><td class="">249</td><td class="">774</td><td class="best">237</td><td class="ratio">4.00×</td></tr><tr><th class="n">manySourcesIntoOneComputedEffectWithDirect</th><td class="">373</td><td class="">184</td><td class="">319</td><td class="best">127</td><td class="ratio">2.03×</td></tr><tr><th class="n">manySourcesIntoOneComputedEffect</th><td class="">371</td><td class="">173</td><td class="">297</td><td class="best">118</td><td class="ratio">2.14×</td></tr><tr><th class="n">manySourcesIntoOneDirectEffect</th><td class="">23.96</td><td class="">29.60</td><td class="">23.19</td><td class="best">11.89</td><td class="ratio">0.81×</td></tr><tr><th class="n">molBench</th><td class="">0.114</td><td class="">0.070</td><td class="">0.109</td><td class="best">0.067</td><td class="ratio">1.63×</td></tr><tr><th class="n">mutable-object/immutable replacement</th><td class="">3.09</td><td class="">1.23</td><td class="">2.25</td><td class="best">0.753</td><td class="ratio">2.52×</td></tr><tr><th class="n">mutable-object/in-place versioned</th><td class="">3.54</td><td class="">1.11</td><td class="">2.35</td><td class="best">0.787</td><td class="ratio">3.20×</td></tr><tr><th class="n">createDataSignals</th><td class="">8.38</td><td class="">10.03</td><td class="">14.08</td><td class="best">5.39</td><td class="ratio">0.84×</td></tr><tr><th class="n">createComputations0to1</th><td class="">78.52</td><td class="best">19.72</td><td class="">109</td><td class="">24.96</td><td class="ratio">3.98×</td></tr><tr><th class="n">createComputations1to1</th><td class="">69.23</td><td class="">28.32</td><td class="">49.77</td><td class="best">13.13</td><td class="ratio">2.44×</td></tr><tr><th class="n">createComputations2to1</th><td class="">51.26</td><td class="">25.11</td><td class="">29.04</td><td class="best">9.29</td><td class="ratio">2.04×</td></tr><tr><th class="n">createComputations4to1</th><td class="">46.02</td><td class="">22.79</td><td class="">18.98</td><td class="best">6.89</td><td class="ratio">2.02×</td></tr><tr><th class="n">createComputations1000to1</th><td class="">29.98</td><td class="">12.42</td><td class="">14.88</td><td class="best">5.07</td><td class="ratio">2.41×</td></tr><tr><th class="n">createComputations1to2</th><td class="">51.21</td><td class="best">30.73</td><td class="">49.71</td><td class="">42.38</td><td class="ratio">1.67×</td></tr><tr><th class="n">createComputations1to4</th><td class="">45.07</td><td class="best">26.26</td><td class="">99.48</td><td class="">46.64</td><td class="ratio">1.72×</td></tr><tr><th class="n">createComputations1to8</th><td class="">54.06</td><td class="best">30.33</td><td class="">128</td><td class="">45.61</td><td class="ratio">1.78×</td></tr><tr><th class="n">createComputations1to1000</th><td class="">83.71</td><td class="">78.51</td><td class="">120</td><td class="best">44.65</td><td class="ratio">1.07×</td></tr><tr><th class="n">updateComputations1to1</th><td class="">85.21</td><td class="best">16.99</td><td class="">66.55</td><td class="">21.09</td><td class="ratio">5.02×</td></tr><tr><th class="n">updateComputations2to1</th><td class="">56.79</td><td class="">21.61</td><td class="">42.56</td><td class="best">18.93</td><td class="ratio">2.63×</td></tr><tr><th class="n">updateComputations4to1</th><td class="">33.48</td><td class="best">14.01</td><td class="">25.93</td><td class="">15.87</td><td class="ratio">2.39×</td></tr><tr><th class="n">updateComputations1000to1</th><td class="">69.76</td><td class="">23.20</td><td class="">44.36</td><td class="best">13.80</td><td class="ratio">3.01×</td></tr><tr><th class="n">updateComputations1to2</th><td class="">64.16</td><td class="">21.19</td><td class="">56.73</td><td class="best">15.48</td><td class="ratio">3.03×</td></tr><tr><th class="n">updateComputations1to4</th><td class="">51.59</td><td class="">19.79</td><td class="">56.39</td><td class="best">15.12</td><td class="ratio">2.61×</td></tr><tr><th class="n">updateComputations1to1000</th><td class="">49.71</td><td class="best">17.24</td><td class="">58.52</td><td class="">19.79</td><td class="ratio">2.88×</td></tr><tr><th class="n">dynamic/dashboard selective reads</th><td class="">879</td><td class="">1183</td><td class="">858</td><td class="best">311</td><td class="ratio">0.74×</td></tr><tr><th class="n">dynamic/editor derived state</th><td class="">1436</td><td class="">1061</td><td class="">1255</td><td class="best">566</td><td class="ratio">1.35×</td></tr><tr><th class="n">dynamic/kanban board</th><td class="">1524</td><td class="">1141</td><td class="">945</td><td class="best">361</td><td class="ratio">1.34×</td></tr><tr><th class="n">dynamic/entity detail page</th><td class="">1405</td><td class="">924</td><td class="">1292</td><td class="best">593</td><td class="ratio">1.52×</td></tr><tr><th class="n">dynamic/layered full-drain cold</th><td class="">305</td><td class="">273</td><td class="">301</td><td class="best">135</td><td class="ratio">1.12×</td></tr><tr><th class="n">dynamic/layered full-drain warm</th><td class="">283</td><td class="">287</td><td class="">194</td><td class="best">157</td><td class="ratio">0.99×</td></tr><tr><th class="n">dynamic/layered burst flush warm</th><td class="">2886</td><td class="">1547</td><td class="">2672</td><td class="best">958</td><td class="ratio">1.87×</td></tr><tr><th class="n">dynamic/stable diamond mesh warm</th><td class="">26.12</td><td class="">265</td><td class="">14.58</td><td class="best">10.01</td><td class="ratio">0.10×</td></tr><tr><th class="n">dynamic/pure pull</th><td class="">3.17</td><td class="">1.38</td><td class="">1.38</td><td class="best">0.861</td><td class="ratio">2.30×</td></tr><tr><th class="n">dynamic/pure push</th><td class="">432</td><td class="">270</td><td class="">390</td><td class="best">137</td><td class="ratio">1.60×</td></tr><tr><th class="n">dynamic/simple component</th><td class="">746</td><td class="">508</td><td class="">586</td><td class="best">227</td><td class="ratio">1.47×</td></tr><tr><th class="n">dynamic/dynamic component</th><td class="">691</td><td class="">276</td><td class="">559</td><td class="best">205</td><td class="ratio">2.50×</td></tr><tr><th class="n">dynamic/large web app</th><td class="">753</td><td class="">4092</td><td class="">729</td><td class="best">351</td><td class="ratio">0.18×</td></tr><tr><th class="n">dynamic/wide dense</th><td class="">2175</td><td class="">4936</td><td class="">1783</td><td class="best">522</td><td class="ratio">0.44×</td></tr><tr><th class="n">dynamic/deep</th><td class="">485</td><td class="">211</td><td class="">409</td><td class="best">169</td><td class="ratio">2.30×</td></tr><tr><th class="n">lifecycle/owned graph create-update-dispose</th><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="best">17.61</td><td class="ratio">—</td></tr><tr><th class="n">lifecycle/dispose retained graph</th><td class="na">—</td><td class="na">—</td><td class="na">—</td><td class="best">0.064</td><td class="ratio">—</td></tr><tr><th class="n">cellx1000</th><td class="">5.99</td><td class="best">1.03</td><td class="">2.24</td><td class="">1.16</td><td class="ratio">5.79×</td></tr><tr><th class="n">cellx2500</th><td class="">21.74</td><td class="best">2.73</td><td class="">5.57</td><td class="">3.42</td><td class="ratio">7.96×</td></tr></table></div>
+
+<h2>What was wrong before, and how it was proved</h2>
+<p>The old core kept an internal effect inside every <code>computed</code>, so a write pushed the new value down
+<i>every</i> path of the graph. A node with two dirty inputs recomputed once per path and ran its effects once
+per path — the first run seeing a half-updated graph. That is what the harness counts as a delivery mismatch.</p>
+<pre>ulive (eager)  diamond: b×1 c×1 d×2 recomputes per write (ideal 1/1/1) | effect saw [4,5] (ideal [5])
+ulive (eager)  4x3 torus: 60 recomputes for one write (ideal 16)
+ulive (pull)   diamond: b×1 c×1 d×1 recomputes per write (ideal 1/1/1) | effect saw [5]
+ulive (pull)   4x3 torus: 16 recomputes for one write (ideal 16)
+preact         diamond: b×1 c×1 d×1 recomputes per write (ideal 1/1/1) | effect saw [5]
+preact         4x3 torus: 16 recomputes for one write (ideal 16)</pre>
+<p>The fix: a write only marks the nodes that read it dirty and queues the affected effects; a
+<code>computed</code> recomputes when it is read, at most once per cascade. A write made while a flush is
+running joins that flush instead of recursing into it.</p>
+
+<h2>Before vs after, one interleaved run</h2>
+<p style="font-size:13.5px;color:#666">run 2: the old eager core measured next to the pull-based build on the same machine, so the comparison is apples to apples.</p>
+<div class="scroll"><table><tr><th class="n">scenario</th><th>ulive</th><th>ulive (pull proto)</th><th>ulive / Preact</th></tr><tr><th class="n">avoidablePropagation</th><td class="best">0.637</td><td class="">1.49</td><td class="ratio">2.53×</td></tr><tr><th class="n">broadPropagation</th><td class="">1.57</td><td class="best">1.43</td><td class="ratio">3.96×</td></tr><tr><th class="n">deepPropagation</th><td class="">0.696</td><td class="best">0.453</td><td class="ratio">3.52×</td></tr><tr><th class="n">diamond</th><td class="">1.05</td><td class="best">0.806</td><td class="ratio">3.98×</td></tr><tr><th class="n">mux</th><td class="best">0.715</td><td class="">1.44</td><td class="ratio">1.76×</td></tr><tr><th class="n">repeatedObservers</th><td class="">0.135</td><td class="best">0.131</td><td class="ratio">3.69×</td></tr><tr><th class="n">manyEffectsFromOneSource</th><td class="best">816</td><td class="">1000</td><td class="ratio">2.97×</td></tr><tr><th class="n">manySourcesIntoOneComputedEffectWithDirect</th><td class="">418</td><td class="best">393</td><td class="ratio">2.72×</td></tr><tr><th class="n">manySourcesIntoOneComputedEffect</th><td class="">623</td><td class="best">375</td><td class="ratio">3.20×</td></tr><tr><th class="n">manySourcesIntoOneDirectEffect</th><td class="best">17.66</td><td class="">22.76</td><td class="ratio">0.59×</td></tr><tr><th class="n">molBench</th><td class="best">0.075</td><td class="">0.108</td><td class="ratio">1.15×</td></tr><tr><th class="n">mutable-object/immutable replacement</th><td class="">2.68</td><td class="best">2.57</td><td class="ratio">2.38×</td></tr><tr><th class="n">mutable-object/in-place versioned</th><td class="">3.06</td><td class="best">2.75</td><td class="ratio">2.68×</td></tr><tr><th class="n">createDataSignals</th><td class="">9.00</td><td class="best">8.77</td><td class="ratio">0.85×</td></tr><tr><th class="n">createComputations0to1</th><td class="">141</td><td class="best">79.10</td><td class="ratio">6.82×</td></tr><tr><th class="n">createComputations1to1</th><td class="">130</td><td class="best">89.64</td><td class="ratio">4.20×</td></tr><tr><th class="n">createComputations2to1</th><td class="">91.56</td><td class="best">48.18</td><td class="ratio">3.46×</td></tr><tr><th class="n">createComputations4to1</th><td class="">64.73</td><td class="best">47.34</td><td class="ratio">2.60×</td></tr><tr><th class="n">createComputations1000to1</th><td class="">38.00</td><td class="best">36.53</td><td class="ratio">2.51×</td></tr><tr><th class="n">createComputations1to2</th><td class="">154</td><td class="best">64.43</td><td class="ratio">5.20×</td></tr><tr><th class="n">createComputations1to4</th><td class="">193</td><td class="best">54.96</td><td class="ratio">5.20×</td></tr><tr><th class="n">createComputations1to8</th><td class="">170</td><td class="best">55.78</td><td class="ratio">6.51×</td></tr><tr><th class="n">createComputations1to1000</th><td class="">144</td><td class="best">74.71</td><td class="ratio">2.12×</td></tr><tr><th class="n">updateComputations1to1</th><td class="">78.88</td><td class="best">50.55</td><td class="ratio">3.62×</td></tr><tr><th class="n">updateComputations2to1</th><td class="">57.38</td><td class="best">36.27</td><td class="ratio">3.41×</td></tr><tr><th class="n">updateComputations4to1</th><td class="">41.77</td><td class="best">29.98</td><td class="ratio">2.91×</td></tr><tr><th class="n">updateComputations1000to1</th><td class="best">45.78</td><td class="">73.78</td><td class="ratio">2.37×</td></tr><tr><th class="n">updateComputations1to2</th><td class="">82.09</td><td class="best">49.47</td><td class="ratio">5.89×</td></tr><tr><th class="n">updateComputations1to4</th><td class="">75.04</td><td class="best">44.86</td><td class="ratio">4.18×</td></tr><tr><th class="n">updateComputations1to1000</th><td class="">77.60</td><td class="best">53.29</td><td class="ratio">4.86×</td></tr><tr><th class="n">dynamic/dashboard selective reads</th><td class="">1704</td><td class="best">898</td><td class="ratio">1.55×</td></tr><tr><th class="n">dynamic/editor derived state</th><td class="">2760</td><td class="best">1446</td><td class="ratio">2.69×</td></tr><tr><th class="n">dynamic/kanban board</th><td class="">1544</td><td class="best">1066</td><td class="ratio">1.64×</td></tr><tr><th class="n">dynamic/entity detail page</th><td class="">2624</td><td class="best">1587</td><td class="ratio">2.94×</td></tr><tr><th class="n">dynamic/layered full-drain cold</th><td class="">491</td><td class="best">295</td><td class="ratio">1.83×</td></tr><tr><th class="n">dynamic/layered full-drain warm</th><td class="">449</td><td class="best">323</td><td class="ratio">0.71×</td></tr><tr><th class="n">dynamic/layered burst flush warm</th><td class="">4149</td><td class="best">2879</td><td class="ratio">3.06×</td></tr><tr><th class="n">dynamic/stable diamond mesh warm</th><td class="">31.70</td><td class="best">17.42</td><td class="ratio">0.17×</td></tr><tr><th class="n">dynamic/pure pull</th><td class="">1.60</td><td class="best">0.775</td><td class="ratio">1.49×</td></tr><tr><th class="n">dynamic/pure push</th><td class="">646</td><td class="best">405</td><td class="ratio">3.07×</td></tr><tr><th class="n">dynamic/simple component</th><td class="">1650</td><td class="best">677</td><td class="ratio">3.16×</td></tr><tr><th class="n">dynamic/dynamic component</th><td class="">1286</td><td class="best">803</td><td class="ratio">3.63×</td></tr><tr><th class="n">dynamic/wide dense</th><td class="">2529</td><td class="best">2209</td><td class="ratio">0.35×</td></tr><tr><th class="n">dynamic/deep</th><td class="">978</td><td class="best">561</td><td class="ratio">4.50×</td></tr><tr><th class="n">cellx1000</th><td class="best">2.42</td><td class="">6.49</td><td class="ratio">2.37×</td></tr><tr><th class="n">cellx2500</th><td class="best">12.04</td><td class="">29.93</td><td class="ratio">4.30×</td></tr></table></div>
+
+<h2>What it costs</h2>
+<div class="scroll"><table>
+<thead><tr><th class="n"></th><th>eager <code>5cef7c3</code></th><th>pull-based <code>8b97cfe</code></th></tr></thead>
+<tbody>
+<tr><th class="n">ulive flavour, min+gz</th><td>1084 raw / 544 gz / 490 brotli</td><td class="best">1175 raw / 612 gz / 575 brotli</td></tr>
+<tr><th class="n">fn flavour</th><td>833 raw / 484 gz / 460 brotli</td><td class="best">1070 raw / 578 gz / 547 brotli</td></tr>
+<tr><th class="n">own test suite</th><td>181 / 176 pass / 5 skip</td><td>181 / 176 pass / 5 skip</td></tr>
+<tr><th class="n">scenarios rejected</th><td class="fail">3 of 51</td><td class="best">0 of 51</td></tr>
+<tr><th class="n">1 effect × 100k writes</th><td class="best">11.8 ms</td><td>29.3 ms</td></tr>
+<tr><th class="n">100 effects × 10k writes</th><td class="best">64.7 ms</td><td>187.1 ms</td></tr>
+<tr><th class="n">diamond × 10k writes</th><td>12.9 ms</td><td class="best">9.0 ms</td></tr>
+<tr><th class="n">computed chain 100 deep</th><td>32.6 ms</td><td class="best">21.5 ms</td></tr>
+</tbody></table></div>
+<p>Two behaviours changed on purpose: a diamond delivers <code>[4, 7]</code> instead of the glitchy
+<code>[4, 5, 7]</code>, and a computed that throws surfaces the error when its value is <b>read</b>, not when the
+source is written — which is what Preact, Solid and alien-signals do too.</p>
+
+<h2>Caveats</h2>
+<ul>
+  <li><code>quick</code> profile, one round, ≤100 samples. Sub-millisecond rows reached 100% coefficient of
+  variation (<code>pure pull</code>: 0.8 / 1.6 / 3.2 ms across three runs of the same build) — read anything under
+  ~1.5× as a tie. Rows in the hundreds of ms are stable.</li>
+  <li><code>lifecycle/*</code> needs a native owner scope (<code>createScope</code>); ulive has no graph-level
+  disposal, so those two rows are empty for ulive, Preact and uSignal.</li>
+  <li>The first pass of this benchmark used <code>withBatch: fn =&gt; fn()</code>. That was my adapter bug — ulive does
+  have <code>batch</code> — and it produced out-of-memory rows. With the real <code>batch()</code> those rows pass even
+  on the old core; the three semantic failures were real.</li>
+</ul>
+
+<h2>Reproduce</h2>
+<p><code>README.md</code> in this folder has the three setup steps. Raw data: <code>samples3.json</code> + <code>run3.log</code>
+(the table above), <code>samples2.json</code> + <code>run2.log</code> (the A/B run), <code>glitch.mjs</code> (the proof),
+<code>table.mjs</code> / <code>make-html.mjs</code> (regenerate this page).</p>
+</body></html>

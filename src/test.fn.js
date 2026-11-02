@@ -1,5 +1,5 @@
-import t, { is } from 'tst'
-import { o, memo, effect } from './fn.js'
+import t, { is, ok, throws } from 'tst'
+import { o, memo, effect, batch, untracked } from './fn.js'
 
 // value
 t('signal: readme', async t => {
@@ -251,4 +251,476 @@ t('computed: chain', t => {
   is(c(), 4)
   a(3)
   is(c(), 5)
+})
+
+// ---------------------------------------------------------------------------
+// value / coercion
+// ---------------------------------------------------------------------------
+
+t('signal: peek', t => {
+  let s = o(1), log = []
+  is(s.peek(), 1, 'peek returns the value')
+
+  // peek must not subscribe
+  effect(() => log.push(s.peek()))
+  s(2)
+  is(log, [1], 'peek does not create a dependency')
+  is(s.peek(), 2, 'peek is always fresh')
+})
+
+t('signal: nothing special about falsy/NaN values', t => {
+  let s = o(NaN), log = []
+  effect(() => log.push(s()))
+
+  s(NaN)
+  is(log.length, 1, 're-setting NaN is not a change')
+
+  s(0)
+  is(log.length, 2, 'NaN -> 0 is a change')
+  ok(Object.is(log[0], NaN), 'NaN is published as is')
+  is(log[1], 0)
+
+  // falsy values are values too
+  let f = o(false), seen = []
+  effect(() => seen.push(f()))
+  f(false)
+  is(seen.length, 1, 'false -> false is not a change')
+  f(undefined)
+  is(seen, [false, undefined], 'false -> undefined is a change')
+})
+
+t('signal: truthiness helpers', async t => {
+  let s = o(5)
+  is(JSON.stringify(s), '5', 'JSON.stringify')
+  is(+s, 5, 'unary plus')
+  is(`${s}`, '5', 'template literal')
+  is(s.then(), 5, 'then() without a resolver returns the value')
+  is(await s, 5, 'await signal')
+  is(s(1), undefined, 'the setter returns nothing')
+})
+
+t('signal: subscribers added during a notification wait for the next write', t => {
+  let a = o(0), childRuns = 0
+
+  // the parent subscribes a second effect to the same signal while the notification runs:
+  // iterating the live subscriber set would notify the new child in the same pass (and with
+  // effects that subscribe on every run, that grows without bound, e.g. a nested component tree)
+  effect(() => { if (a() === 1) effect(() => { childRuns++; a() }) })
+
+  a(1)
+  is(childRuns, 1, 'the new subscriber ran once, not again for the write already in flight')
+  a(2)
+  is(childRuns, 2, 'it is notified by later writes')
+})
+
+// ---------------------------------------------------------------------------
+// batch
+// ---------------------------------------------------------------------------
+
+t('batch: defers effects to the end of the batch', t => {
+  let a = o(0), b = o(0)
+  let mul = memo(() => a() * b())
+  let log = []
+  effect(() => log.push(mul()))
+
+  batch(() => {
+    a(2)
+    b(3)
+    is(log, [0], 'nothing runs while the batch is open')
+  })
+
+  is(log, [0, 6], 'effect runs once with the final values')
+  is(mul(), 6)
+})
+
+t('batch: many distinct effects are not mistaken for a loop', t => {
+  let sigs = [], runs = 0
+
+  for (let i = 0; i < 2000; i++) {
+    let s = o(0)
+    sigs.push(s)
+    effect(() => { s(), runs++ })
+  }
+
+  is(runs, 2000)
+  batch(() => { for (const s of sigs) s(1) })
+  is(runs, 4000, 'a 2000 effect batch flushes, it is not a runaway loop')
+})
+
+t('batch: returns the callback result', t => {
+  let a = o(0)
+  effect(() => a())
+  is(batch(() => 42), 42, 'top level')
+  is(batch(() => batch(() => 7)), 7, 'nested')
+  is(batch(() => { a(1) }), undefined, 'implicit undefined')
+})
+
+t('batch: no writes, no runs', t => {
+  let a = o(0), runs = 0
+  effect(() => { a(); runs++ })
+  is(runs, 1)
+
+  batch(() => { a(0) })
+  is(runs, 1, 'unchanged value does not notify')
+
+  batch(() => {})
+  is(runs, 1, 'empty batch does nothing')
+})
+
+t('batch: nested batches flush once, at the outer end', t => {
+  let a = o(0), c = o(0), log = []
+  effect(() => log.push('a' + a()))
+  effect(() => log.push('c' + c()))
+
+  batch(() => {
+    a(1)
+    batch(() => { c(1) })
+    is(log, ['a0', 'c0'], 'inner batch does not flush')
+    log.push('inner done')
+  })
+
+  is(log, ['a0', 'c0', 'inner done', 'a1', 'c1'])
+})
+
+t('batch: an effect queued during the flush runs once', t => {
+  let a = o(0), b = o(0), c = o(0), log = []
+  effect(() => { log.push('E' + a()); c(a()) })
+  effect(() => log.push('F' + c() + b()))
+
+  batch(() => { a(1); b(1) })
+
+  is(log, ['E0', 'F00', 'E1', 'F11'], 'F must not run twice')
+})
+
+t('batch: still flushes when the callback throws', t => {
+  let a = o(0), log = []
+  effect(() => log.push(a()))
+
+  throws(() => batch(() => { a(1); throw Error('boom') }), /boom/)
+
+  is(log, [0, 1], 'effects run before the error surfaces')
+  is(a(), 1, 'the write is kept')
+})
+
+t('batch: an effect error does not wedge batching', t => {
+  let a = o(0), log = []
+  effect(() => {
+    if (a() === 1) throw Error('explode')
+    log.push(a())
+  })
+
+  throws(() => batch(() => { a(1) }), /explode/)
+
+  a(2)
+  is(log, [0, 2], 'later updates are still delivered')
+  is(batch(() => 'ok'), 'ok', 'batching is still usable')
+})
+
+t('batch: runaway effect loops fail instead of hanging', t => {
+  let a = o(0), b = o(0), on = o(false)
+  effect(() => { let v = a(); on.peek() && b(v + 1) })
+  effect(() => { let v = b(); on.peek() && a(v + 1) })
+  on(true)
+
+  throws(() => batch(() => { a(1) }), /depth/, 'bounded')
+  is(batch(() => 'alive'), 'alive', 'batching recovers')
+})
+
+// ---------------------------------------------------------------------------
+// untracked
+// ---------------------------------------------------------------------------
+
+t('untracked: reads are not subscribed', t => {
+  let a = o(1), b = o(1), log = []
+  effect(() => log.push([a(), untracked(() => b())]))
+
+  is(log, [[1, 1]])
+  b(2)
+  is(log, [[1, 1]], 'b is untracked')
+  a(2)
+  is(log, [[1, 1], [2, 2]], 'a is tracked')
+})
+
+t('untracked: return value, nesting and error safety', t => {
+  let a = o(1), b = o(1)
+  is(untracked(() => 42), 42, 'returns the value')
+  is(untracked(() => untracked(() => b())), 1, 'nesting is fine')
+
+  // a throw inside untracked must not disable tracking afterwards
+  let log = []
+  effect(() => {
+    log.push(a())
+    try { untracked(() => { throw Error('x') }) } catch {}
+    b() // still tracked
+  })
+
+  is(log, [1])
+  b(2)
+  is(log, [1, 1], 'effect still tracks b after the throw')
+  a(3)
+  is(log, [1, 1, 3])
+})
+
+t('untracked: memo does not depend on untracked reads', t => {
+  let a = o(1), b = o(10)
+  let runs = 0
+  let c = memo(() => { runs++; return a() + untracked(() => b()) })
+
+  is(c(), 11)
+  is(runs, 1)
+  b(20)
+  is(c(), 11, 'b is not a dependency')
+  is(runs, 1, 'no recompute')
+  a(2)
+  is(c(), 22, 'recompute picks up the fresh b')
+  is(runs, 2)
+})
+
+// ---------------------------------------------------------------------------
+// effects: nesting, dispose
+// ---------------------------------------------------------------------------
+
+t('effect: dispose is idempotent', t => {
+  let a = o(0), log = []
+  let off = effect(() => {
+    let v = a()
+    log.push(v)
+    return () => log.push('teardown' + v)
+  })
+
+  off()
+  off()
+  is(log, [0, 'teardown0'], 'teardown runs once')
+
+  a(1)
+  is(log, [0, 'teardown0'], 'disposed effect is silent')
+})
+
+t('effect: dispose inside a batch does not resurrect the effect', t => {
+  let a = o(0), log = []
+  let off = effect(() => log.push(a()))
+
+  batch(() => {
+    a(1)      // effect is queued
+    off()     // ... and disposed before the flush
+  })
+
+  is(log, [0], 'nothing runs after dispose')
+  a(2)
+  is(log, [0], 'stays disposed')
+})
+
+t('effect: nested effect returned as teardown', t => {
+  let a = o(0), b = o(0), log = []
+  let off = effect(() => {
+    log.push('outer' + a())
+    return effect(() => log.push('inner' + b()))
+  })
+
+  is(log, ['outer0', 'inner0'], 'nested effect runs immediately')
+
+  a(1)
+  is(log, ['outer0', 'inner0', 'outer1', 'inner0'], 'fresh inner effect, the old one is disposed')
+
+  b(1)
+  is(log, ['outer0', 'inner0', 'outer1', 'inner0', 'inner1'], 'only the fresh inner reacts')
+
+  off()
+  b(2)
+  is(log.length, 5, 'everything is gone')
+})
+
+t('effect: a throwing body does not wedge updates', t => {
+  let a = o(0), log = []
+  throws(() => effect(() => {
+    if (a() === 0) throw Error('first run')
+    log.push(a())
+  }), /first run/)
+
+  a(1)
+  is(log, [1], 'the effect is still subscribed and current is restored')
+})
+
+t('effect: without dependencies it only runs once', t => {
+  let runs = 0
+  effect(() => runs++)
+  is(runs, 1)
+})
+
+t('effect: nested effect does not leak into the parent deps', t => {
+  let a = o(0), b = o(0), outer = [], inner = []
+  effect(() => {
+    outer.push(a())
+    effect(() => inner.push(b()))
+  })
+
+  is(outer, [0])
+  is(inner, [0])
+
+  b(1)
+  is(outer, [0], 'parent does not track child deps')
+  is(inner, [0, 1], 'child is fine')
+
+  a(1)
+  is(outer, [0, 1])
+  is(inner, [0, 1, 1], 'child re-created, old instance still alive')
+})
+
+// ---------------------------------------------------------------------------
+// memo
+// ---------------------------------------------------------------------------
+
+t('computed: lazy and cached', t => {
+  let runs = 0, a = o(1)
+  let b = memo(() => (runs++, a() * 2))
+
+  is(runs, 0, 'not evaluated until read')
+  is(b(), 2)
+  is(runs, 1)
+  is(b(), 2)
+  is(runs, 1, 'cached')
+  is(b.peek(), 2)
+  is(runs, 1, 'peek does not recompute')
+
+  a(2)
+  is(b(), 4)
+  is(runs, 2)
+})
+
+t('computed: peek initializes without subscribing', t => {
+  let a = o(1), log = []
+  let b = memo(() => a() + 1)
+
+  is(b.peek(), 2, 'peek initializes the memo')
+
+  effect(() => log.push(b.peek()))
+  a(2)
+  is(log, [2], 'peek never subscribes')
+  is(b.peek(), 3)
+  is(b(), 3)
+})
+
+t('computed: no recompute without a change', t => {
+  let runs = 0, a = o(1)
+  let b = memo(() => (runs++, a()))
+
+  is(b(), 1)
+  is(runs, 1)
+  a(1)
+  is(b(), 1)
+  is(runs, 1, 'same value does not recompute')
+})
+
+t('computed: diamond dependencies', t => {
+  let a = o(1)
+  let b = memo(() => a() + 1)
+  let c = memo(() => a() * 2)
+  let d = memo(() => b() + c())
+
+  is(d(), 4) // (1+1) + (1*2)
+
+  let log = []
+  effect(() => log.push(d()))
+
+  a(2)
+  // the join is recomputed once, when the effect reads it, so no intermediate
+  // state (b updated, c not yet) is ever delivered
+  is(log, [4, 7], 'one delivery, no intermediate value')
+  is(log.at(-1), 7, 'final value') // (2+1) + (2*2)
+  is(d(), 7)
+})
+
+t('computed: circular dependency is detected', t => {
+  let base = o(1)
+  let c = memo(() => c() + base())
+
+  throws(() => c(), /circular/, 'self reference')
+  throws(() => c(), /circular/, 'still detected, no stack overflow')
+
+  let x, y
+  x = memo(() => y() + 1)
+  y = memo(() => x() + 1)
+  throws(() => x(), /circular/, 'mutual reference')
+})
+
+t('computed: a throwing fn keeps the memo usable', t => {
+  let fail = o(false), runs = 0
+  let c = memo(() => {
+    runs++
+    if (fail()) throw Error('nope')
+    return 1
+  })
+
+  is(c(), 1)
+  is(runs, 1)
+
+  // the write only marks the memo dirty: it runs when its value is read
+  fail(true)
+  throws(() => c(), /nope/, 'the error surfaces to the reader')
+
+  fail(false)
+  is(c(), 1, 'still usable after the error')
+  is(runs, 3, 'it recomputes again')
+})
+
+// ---------------------------------------------------------------------------
+// mixed
+// ---------------------------------------------------------------------------
+
+t('mixed: batch + memo + untracked + effect', t => {
+  let a = o(1), b = o(1)
+  let product = memo(() => a() * b())
+  let log = []
+
+  effect(() => log.push(product() + untracked(() => a())))
+
+  is(log, [2], '1*1 + 1')
+  batch(() => { a(2); b(2) })
+  is(log, [2, 6], 'one run per batch: 4 + 2')
+})
+
+t('mixed: batch inside an effect', t => {
+  let a = o(0), b = o(0), log = []
+  effect(() => log.push('a' + a()))
+  effect(() => { batch(() => { b(a() * 10) }) })
+  effect(() => log.push('b' + b()))
+
+  is(log, ['a0', 'b0'])
+  a(1)
+  is(log, ['a0', 'b0', 'a1', 'b10'])
+})
+
+t('mixed: nested effects, memo and untracked', t => {
+  let a = o(1), b = o(2), log = []
+  let sum = memo(() => a() + b())
+  let off = effect(() => {
+    log.push('sum' + sum())
+    let innerOff = effect(() => log.push('untracked b' + untracked(() => b())))
+    return innerOff
+  })
+
+  is(log, ['sum3', 'untracked b2'])
+  b(3)
+  is(log, ['sum3', 'untracked b2', 'sum4', 'untracked b3'], 'memo tracked, b untracked')
+  off()
+  a(2)
+  is(log.length, 4, 'all disposed')
+})
+
+t('mixed: effect created inside a batch runs immediately', t => {
+  let a = o(0), log = []
+  batch(() => {
+    effect(() => log.push(a()))
+    log.push('in batch')
+  })
+  is(log, [0, 'in batch'], 'only pending writes are deferred')
+  a(1)
+  is(log, [0, 'in batch', 1])
+})
+
+t('mixed: untracked writes still notify', t => {
+  let a = o(0), log = []
+  effect(() => log.push(a()))
+  untracked(() => { a(1) })
+  is(log, [0, 1], 'untracked only disables reads')
 })
