@@ -33,6 +33,18 @@ The official harness (semantics v4) is the one that matters, so start there:
 
 `reactivity/report-1-summary.png` is the whole thing on one page.
 
+## Size
+
+Minified (`dist/index.min.js`, `fn/index.min.js`), then gzip -9 / brotli:
+
+| | raw | gzip | brotli |
+|---|---:|---:|---:|
+| ulive (object flavour) | 1175 | 612 | 575 |
+| ulive/fn (callable flavour) | 1070 | 578 | 547 |
+
+The pull-based core that fixed the harness failures was first written at 1355 raw / 617 brotli;
+a measured size pass brought it back down (table in `reactivity/RESULTS.md`).
+
 ## Reproducing the official harness run
 
 See `reactivity/README.md`: clone the harness, copy the two adapter files from
