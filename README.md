@@ -131,12 +131,17 @@ off();
 ### Notes
 
 -   `peek()` never subscribes, and it initializes a `computed`/`memo` on first use.
--   Reading a `computed`/`memo` from itself (directly or through a cycle) throws a
-    `RangeError` instead of overflowing the stack.
+-   Reading a `computed`/`memo` from itself (directly or through a cycle) throws an
+    `Error('circular')` instead of overflowing the stack.
+-   A write only notifies the effects that were already subscribed when it started.
+    An effect that subscribes another effect to the same signal (a nested component
+    tree, a list that renders lists) therefore does not fan out inside one write.
 -   Effects created inside an effect are not disposed automatically - return the
     inner disposer as the teardown, otherwise every parent run adds a new one.
 -   A diamond (`a -> b, c -> d`) can notify an effect with an intermediate value
     before it settles; wrap writes in `batch` and read the final value.
+-   Dependencies are collected per effect and only dropped on dispose: an effect that
+    stops reading a signal behind a false condition stays subscribed to it.
 
 ### toJSON or then or valueOf
 

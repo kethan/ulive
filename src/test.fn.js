@@ -299,6 +299,20 @@ t('signal: truthiness helpers', async t => {
   is(s(1), undefined, 'the setter returns nothing')
 })
 
+t('signal: subscribers added during a notification wait for the next write', t => {
+  let a = o(0), childRuns = 0
+
+  // the parent subscribes a second effect to the same signal while the notification runs:
+  // iterating the live subscriber set would notify the new child in the same pass (and with
+  // effects that subscribe on every run, that grows without bound, e.g. a nested component tree)
+  effect(() => { if (a() === 1) effect(() => { childRuns++; a() }) })
+
+  a(1)
+  is(childRuns, 1, 'the new subscriber ran once, not again for the write already in flight')
+  a(2)
+  is(childRuns, 2, 'it is notified by later writes')
+})
+
 // ---------------------------------------------------------------------------
 // batch
 // ---------------------------------------------------------------------------

@@ -16,7 +16,7 @@ const signal = (v, s, obs = new Set) => sigShare(
     set value(val) {
       if (Object.is(val, v)) return;
       v = val;
-      for (let sub of obs) batched ? batched.add(sub) : sub();
+      for (const sub of [...obs]) batched ? batched.add(sub) : sub();
     },
     peek: () => v,
   }
@@ -43,7 +43,7 @@ const effect = (fn, teardown, fx, deps) => (
 const computed = (fn, s = signal(), c, e, r) => sigShare(
   c = {
     get value() {
-      if (r) throw new RangeError('circular dependency');
+      if (r) throw Error('circular');
       if (!e) {
         r = 1;
         try { e = effect(() => s.value = fn()); } finally { r = 0; }
@@ -65,7 +65,7 @@ const batch = (fn, fxs = batched, i = 0) => {
         // keep batching while flushing, so effects queued by effects are deduped
         // (iterating the live set also picks up effects queued during the flush)
         for (const fx of fxs) {
-          if (++i > 1e3) throw new RangeError('depth');
+          if (++i > 1e3) throw Error('depth');
           fxs.delete(fx);
           fx();
         }
