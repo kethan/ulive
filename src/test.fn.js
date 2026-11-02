@@ -623,9 +623,9 @@ t('computed: diamond dependencies', t => {
   effect(() => log.push(d()))
 
   a(2)
-  // NB: a diamond read inside an effect can be observed twice, the 5 is the
-  // intermediate state (b updated, c not yet). The final value is what counts.
-  is(log, [4, 5, 7])
+  // the join is recomputed once, when the effect reads it, so no intermediate
+  // state (b updated, c not yet) is ever delivered
+  is(log, [4, 7], 'one delivery, no intermediate value')
   is(log.at(-1), 7, 'final value') // (2+1) + (2*2)
   is(d(), 7)
 })
@@ -654,7 +654,9 @@ t('computed: a throwing fn keeps the memo usable', t => {
   is(c(), 1)
   is(runs, 1)
 
-  throws(() => { fail(true) }, /nope/, 'the error surfaces to the writer')
+  // the write only marks the memo dirty: it runs when its value is read
+  fail(true)
+  throws(() => c(), /nope/, 'the error surfaces to the reader')
 
   fail(false)
   is(c(), 1, 'still usable after the error')
