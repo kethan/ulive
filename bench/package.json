@@ -1,0 +1,19 @@
+{
+  "name": "ulive-bench",
+  "private": true,
+  "type": "module",
+  "description": "Benchmarks for ulive. Not published: package.json in the repo root lists only dist/ and fn/ in `files`.",
+  "scripts": {
+    "bench": "node --expose-gc bench.mjs ulive",
+    "bench:krausest": "node --expose-gc krausest/run.mjs ulive 9",
+    "serve": "node serve.mjs",
+    "table": "node reactivity/table.mjs",
+    "html": "node reactivity/make-html.mjs"
+  },
+  "dependencies": {
+    "@preact/signals-core": "^1.14.5",
+    "jsdom": "^26.0.0",
+    "sprae": "^13.9.5",
+    "usignal": "^0.10.0"
+  }
+}

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<title>ulive vs other signals - js-framework-benchmark operations</title>
+<style>
+  :root { color-scheme: dark light; }
+  body { font: 14px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 24px; }
+  h1 { font-size: 17px; margin: 0 0 4px; }
+  p.note { margin: 0 0 18px; opacity: .7; max-width: 78ch; }
+  button { font: inherit; padding: 6px 12px; margin: 0 6px 6px 0; cursor: pointer; }
+  button:disabled { opacity: .45; cursor: progress; }
+  table { border-collapse: collapse; margin-top: 14px; }
+  th, td { padding: 3px 10px; text-align: right; border-bottom: 1px solid #8884; }
+  th:first-child, td:first-child { text-align: left; }
+  .best { font-weight: 700; }
+  .slow { color: #d66; }
+  #status { margin: 10px 0; opacity: .8; }
+  #out { white-space: pre; margin-top: 14px; opacity: .75; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>js-framework-benchmark operations, in this browser</h1>
+<p class="note">
+  The same renderer code runs for every library; only the reactivity layer is swapped. Timings are ms,
+  median of N runs after a warm-up pass. The point is the ratio to plain DOM updates, not absolute numbers.
+</p>
+<div>
+  <button id="run" data-libs="ulive,ulive-old,preact,usignal,sprae,vanilla">Run all libraries</button>
+  <button data-run="ulive">ulive</button>
+  <button data-run="ulive-old">ulive (closure)</button>
+  <button data-run="preact">preact/signals</button>
+  <button data-run="usignal">usignal</button>
+  <button data-run="sprae">sprae</button>
+  <button data-run="vanilla">vanilla (no signals)</button>
+</div>
+<div id="status"></div>
+<div id="table"></div>
+<div id="out"></div>
+
+<!-- the benchmark table under test (kept out of the way) -->
+<div id="sandbox" style="position:absolute;left:-9999px;top:0">
+  <table><tbody id="tbody"></tbody></table>
+</div>
+
+<script type="module">
+import { adapters, createSignalsApp, createVanillaApp } from '../app.mjs';
+
+const RUNS = 9;
+const tbody = document.getElementById('tbody');
+const document_ = document;
+const ctx = { document: document_, tbody };
+const status = document.getElementById('status');
+const tableEl = document.getElementById('table');
+const outEl = document.getElementById('out');
+
+const rowsInDom = () => tbody.children.length;
+const ids = () => [...tbody.children].map((tr) => +tr.getAttribute('data-id'));
+const danger = () => [...tbody.children].filter((tr) => tr.classList.contains('danger')).map((tr) => +tr.getAttribute('data-id'));
+const cell = (id, n) => tbody.querySelector(`tr[data-id="${id}"]`)?.children[n]?.textContent;
+
+const scenarios = [
+  ['create 1k rows', () => {}, (app) => app.create(1000), () => rowsInDom() === 1000],
+  ['replace all 1k rows', (app) => app.create(1000), (app) => app.create(1000), () => rowsInDom() === 1000 && ids()[0] === 1],
+  ['update every 10th row (1k)', (app) => app.create(1000), (app) => app.updateEvery10th(),
+    () => [...tbody.children].filter((tr) => tr.children[1].textContent.endsWith('*')).length === 100],
+  ['select row (1k)', (app) => app.create(1000), (app) => { app.select(5); app.select(6) },
+    () => { const d = danger(); return d.length === 1 && d[0] === 6 }],
+  ['swap 2 rows (1k)', (app) => app.create(1000), (app) => app.swap(),
+    () => ids()[1] === 999 && ids()[998] === 2],
+  ['remove row (1k)', (app) => app.create(1000), (app) => app.remove(500),
+    () => rowsInDom() === 999 && !ids().includes(500)],
+  ['create 10k rows', () => {}, (app) => app.create(10000), () => rowsInDom() === 10000],
+  ['append 1k to 1k', (app) => app.create(1000), (app) => app.append(1000),
+    () => rowsInDom() === 2000 && ids()[1999] === 2000],
+  ['clear 1k rows', (app) => app.create(1000), (app) => app.clear(), () => rowsInDom() === 0],
+];
+
+const median = (a) => { const s = [...a].sort((x, y) => x - y); return s[(s.length / 2) | 0] };
+const nextFrame = () => new Promise((r) => requestAnimationFrame(() => r()));
+
+async function runLib(name) {
+  const lib = name === 'vanilla' ? null : await adapters[name]();
+  const newApp = () => (lib ? createSignalsApp(ctx, lib) : createVanillaApp(ctx));
+
+  for (const [, setup, op] of scenarios) { const app = newApp(); setup(app); op(app) }  // warm-up
+
+  const res = {};
+  for (const [label, setup, op, verify] of scenarios) {
+    const samples = [];
+    let ok = true;
+    for (let r = 0; r < RUNS; r++) {
+      const app = newApp();
+      setup(app);
+      const t = performance.now();
+      op(app);
+      samples.push(performance.now() - t);
+      if (r === 0) ok = !!verify(app);
+    }
+    res[label] = { ms: median(samples), ok };
+    await nextFrame(); // let the browser breathe so GC does not pile up
+  }
+
+  // retained heap for 10k live rows, when the browser exposes it
+  let mem = null;
+  if (performance.measureUserAgentSpecificMemory) {
+    try {
+      const app = newApp(); app.create(10000);
+      const m = await performance.measureUserAgentSpecificMemory();
+      mem = m.bytes / 1048576;
+      app.clear();
+    } catch {}
+  }
+  return { lib: name, res, mem };
+}
+
+const results = [];
+function render() {
+  if (!results.length) return;
+  const labels = Object.keys(results[0].res);
+  let html = '<table><tr><th>scenario (ms)</th>' + results.map((r) => `<th>${r.lib}</th>`).join('') + '</tr>';
+  for (const l of labels) {
+    const vals = results.map((r) => r.res[l].ms);
+    const best = Math.min(...vals);
+    html += `<tr><td>${l}</td>` + vals.map((v) =>
+      `<td class="${v === best ? 'best' : ''}">${v.toFixed(v >= 100 ? 0 : 2)}</td>`).join('') + '</tr>';
+  }
+  const van = results.find((r) => r.lib === 'vanilla');
+  if (van) {
+    html += '<tr><td colspan="' + (results.length + 1) + '"></td></tr><tr><td>x plain DOM</td>' +
+      results.map((r) => `<td>${r.lib === 'vanilla' ? '-' : (r.res[Object.keys(r.res)[0]].ms / van.res[Object.keys(r.res)[0]].ms).toFixed(2) + 'x'}</td>`).join('') + '</tr>';
+  }
+  const bad = results.flatMap((r) => Object.entries(r.res).filter(([, v]) => !v.ok).map(([k]) => `${r.lib}: ${k}`));
+  html += '</table><p>' + (bad.length ? `<span class="slow">correctness FAILED: ${bad.join('; ')}</span>` : 'correctness: every operation verified on every library') + '</p>';
+  tableEl.innerHTML = html;
+  outEl.textContent = JSON.stringify(results.map(({ lib, res, mem }) => ({ lib, mem, ms: Object.fromEntries(Object.entries(res).map(([k, v]) => [k, +v.ms.toFixed(2)])) })), null, 1);
+}
+
+async function run(list) {
+  for (const b of document.querySelectorAll('button')) b.disabled = true;
+  results.length = 0;
+  for (const name of list) {
+    status.textContent = 'running ' + name + '…';
+    await nextFrame();
+    results.push(await runLib(name));
+    render();
+  }
+  status.textContent = 'done - ' + RUNS + ' runs per scenario, median shown';
+  for (const b of document.querySelectorAll('button')) b.disabled = false;
+}
+
+document.getElementById('run').onclick = (e) => run(e.target.dataset.libs.split(','));
+for (const b of document.querySelectorAll('button[data-run]')) b.onclick = () => run([b.dataset.run]);
+run(['ulive', 'preact', 'vanilla']);
+</script>
+</body>
+</html>

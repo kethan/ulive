@@ -1,0 +1,104 @@
+ulive in the official js-reactivity-benchmark (volynetstyle/js-reactivity-benchmark, semantics v4)
+BENCH_PROFILE=quick, one forked worker per row, Xeon 2.60GHz 2 cores, Node v22.22.3, medians in ms, lower is better
+
+HEADLINE
+  scenarios rejected      0 / 51   (old eager core: 3 / 51 - triangle, unstable, dynamic/large web app)
+  ulive median            51.6 ms over 49 scenarios
+  vs Preact Signals       2.30x slower overall, faster on 7 of 49 scenarios
+  size (brotli)           617 B  (was 490 B)
+
+STANDINGS - median over the 49 scenarios every build completes
+  1. alien    15.9 ms
+  2. preact   23.2 ms
+  3. usignal  49.8 ms
+  4. ulive    51.6 ms
+
+WHERE ULIVE WINS - large graphs                ulive    preact   usignal     alien
+  dynamic/large web app                           753     4092      729      351
+  dynamic/wide dense                             2175     4936     1783      522
+  dynamic/stable diamond mesh warm              26.12      265    14.58    10.01
+  dynamic/dashboard selective reads               879     1183      858      311
+  manySourcesIntoOneDirectEffect                23.96    29.60    23.19    11.89
+
+WHERE ULIVE LOSES - tiny graphs                ulive    preact   usignal     alien
+  avoidablePropagation                           1.48    0.229     1.17    0.176
+  updateComputations1to1                        85.21    16.99    66.55    21.09
+  manyEffectsFromOneSource                        994      249      774      237
+  cellx1000                                      5.99     1.03     2.24     1.16
+  cellx2500                                     21.74     2.73     5.57     3.42
+
+BEFORE (eager 5cef7c3) vs AFTER (pull-based), one interleaved run on the same machine
+  scenario                                        eager    after
+  triangle                                          FAIL    0.329
+  unstable                                          FAIL    0.176
+  dynamic/large web app                             FAIL      966
+  dynamic/simple component                          1650      677
+  dynamic/editor derived state                      2760     1446
+  dynamic/stable diamond mesh warm                 31.70    17.42
+  avoidablePropagation                             0.637     1.49
+  cellx2500                                        12.04    29.93
+  median / wins                                     80.5     51.9   (after wins 38 of 46)
+
+ALL 51 SCENARIOS                               ulive    preact   usignal     alien   ulive/preact
+  avoidablePropagation                           1.48    0.229     1.17    0.176       6.45x
+  broadPropagation                               1.39    0.407     1.02    0.351       3.40x
+  deepPropagation                               0.468    0.153    0.423    0.092       3.06x
+  diamond                                       0.829    0.271    0.642    0.185       3.05x
+  mux                                            1.48    0.432     1.47    0.359       3.43x
+  repeatedObservers                             0.126    0.035    0.100    0.064       3.56x
+  triangle                                      0.303    0.089    0.227    0.073       3.42x
+  unstable                                      0.183    0.083    0.125    0.085       2.19x
+  manyEffectsFromOneSource                        994      249      774      237       4.00x
+  manySourcesIntoOneComputedEffectWithDirect      373      184      319      127       2.03x
+  manySourcesIntoOneComputedEffect                371      173      297      118       2.14x
+  manySourcesIntoOneDirectEffect                23.96    29.60    23.19    11.89       0.81x
+  molBench                                      0.114    0.070    0.109    0.067       1.63x
+  mutable-object/immutable replacement           3.09     1.23     2.25    0.753       2.52x
+  mutable-object/in-place versioned              3.54     1.11     2.35    0.787       3.20x
+  createDataSignals                              8.38    10.03    14.08     5.39       0.84x
+  createComputations0to1                        78.52    19.72      109    24.96       3.98x
+  createComputations1to1                        69.23    28.32    49.77    13.13       2.44x
+  createComputations2to1                        51.26    25.11    29.04     9.29       2.04x
+  createComputations4to1                        46.02    22.79    18.98     6.89       2.02x
+  createComputations1000to1                     29.98    12.42    14.88     5.07       2.41x
+  createComputations1to2                        51.21    30.73    49.71    42.38       1.67x
+  createComputations1to4                        45.07    26.26    99.48    46.64       1.72x
+  createComputations1to8                        54.06    30.33      128    45.61       1.78x
+  createComputations1to1000                     83.71    78.51      120    44.65       1.07x
+  updateComputations1to1                        85.21    16.99    66.55    21.09       5.02x
+  updateComputations2to1                        56.79    21.61    42.56    18.93       2.63x
+  updateComputations4to1                        33.48    14.01    25.93    15.87       2.39x
+  updateComputations1000to1                     69.76    23.20    44.36    13.80       3.01x
+  updateComputations1to2                        64.16    21.19    56.73    15.48       3.03x
+  updateComputations1to4                        51.59    19.79    56.39    15.12       2.61x
+  updateComputations1to1000                     49.71    17.24    58.52    19.79       2.88x
+  dynamic/dashboard selective reads               879     1183      858      311       0.74x
+  dynamic/editor derived state                   1436     1061     1255      566       1.35x
+  dynamic/kanban board                           1524     1141      945      361       1.34x
+  dynamic/entity detail page                     1405      924     1292      593       1.52x
+  dynamic/layered full-drain cold                 305      273      301      135       1.12x
+  dynamic/layered full-drain warm                 283      287      194      157       0.99x
+  dynamic/layered burst flush warm               2886     1547     2672      958       1.87x
+  dynamic/stable diamond mesh warm              26.12      265    14.58    10.01       0.10x
+  dynamic/pure pull                              3.17     1.38     1.38    0.861       2.30x
+  dynamic/pure push                               432      270      390      137       1.60x
+  dynamic/simple component                        746      508      586      227       1.47x
+  dynamic/dynamic component                       691      276      559      205       2.50x
+  dynamic/large web app                           753     4092      729      351       0.18x
+  dynamic/wide dense                             2175     4936     1783      522       0.44x
+  dynamic/deep                                    485      211      409      169       2.30x
+  lifecycle/owned graph create-update-dispose     FAIL     FAIL     FAIL    17.61           -
+  lifecycle/dispose retained graph               FAIL     FAIL     FAIL    0.064           -
+  cellx1000                                      5.99     1.03     2.24     1.16       5.79x
+  cellx2500                                     21.74     2.73     5.57     3.42       7.96x
+
+WHAT WAS WRONG BEFORE (one write, recompute counts)
+  ulive eager  diamond b x1 c x1 d x2 | effect saw [4,5]   <- glitch   | 4x3 torus: 60 recomputes
+  ulive pull   diamond b x1 c x1 d x1 | effect saw [5]                | 4x3 torus: 16 recomputes
+  preact       diamond b x1 c x1 d x1 | effect saw [5]                | 4x3 torus: 16 recomputes
+
+CAVEATS
+  quick profile, 1 round, <=100 samples: sub-ms rows up to 100% CV (pure pull: 0.8/1.6/3.2 ms on the same build).
+  Read differences under ~1.5x as ties. Rows in the hundreds of ms are stable.
+  lifecycle/* needs createScope; ulive has none, so those rows are empty for ulive/preact/usignal.
+  A first pass used withBatch: fn => fn() - an adapter bug (ulive has batch) - which produced OOM rows.
