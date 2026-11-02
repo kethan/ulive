@@ -5,42 +5,46 @@ let current, batched, flushing;
 // cascade, when it is read (a diamond no longer recomputes its join once per path).
 const queue = new Set;
 
-// A node holds its value in `v`, its subscribers in `o`, its dependencies in `d` and a dirty flag
-// in `st`. The class instances below are nodes, and so is the callable of the function flavour;
-// an effect is the plain object built in `effect`.
+// A node holds its value in `v`, its subscribers in `o`, its dependencies in `d`, a dirty flag in
+// `st` and, when it is a computed, its producer in `fn`. The class instances below are nodes, and
+// so is the callable of the function flavour; an effect is the plain object built in `effect`.
 const track = (n) => current && (current.d.add(n), (n.o ||= new Set).add(current));
 
 // Mark the subscribers of a written signal dirty: effects are queued, computeds only propagate.
-// An effect is the only node with an `f` (alive) flag, so it is also the only one that runs.
-const dirty = (n) => n.f !== undefined
-  ? n.f && queue.add(n)
+// An effect is the only node with an `f` (alive) flag, so it is the only one that gets queued.
+const dirty = (n) => n.f
+  ? queue.add(n)
   : n.st || ((n.st = 1), n.o && n.o.forEach(dirty));
 
 const fire = (n) => n.o && n.o.forEach(dirty);
 
-// recompute a dirty node once, dropping the subscriptions it no longer reads
-const compute = (n, prev, old) => {
-  if (n.r) throw Error('circular'); // re-entered while computing: a cycle
-  n.r = 1, prev = current, old = n.d, n.d = new Set, current = n;
-  try { n.v = n.fn(), n.st = 0; } finally { n.r = 0, current = prev; }
-  old?.forEach((dep) => n.d.has(dep) || dep.o.delete(n));
+// drop the subscriptions a node no longer reads
+const prune = (n, old) => old?.forEach((dep) => n.d.has(dep) || dep.o.delete(n));
+
+// run a node's producer with `current` pointing at it, then drop its stale subscriptions
+const exec = (n, prev, old) => {
+  old = n.d, n.d = new Set, prev = current, current = n;
+  try { return n.fn() } finally { current = prev, prune(n, old); }
 };
 
-const run = (fx, prev, old) => {
-  fx.t?.call?.(), fx.t = 0;
-  old = fx.d, fx.d = new Set, prev = current, current = fx;
-  try { fx.t = fx.fn(); } finally { current = prev; }
-  old.forEach((dep) => fx.d.has(dep) || dep.o.delete(fx));
+// recompute a dirty node once
+const compute = (n) => {
+  if (n.r) throw Error('circular'); // re-entered while computing: a cycle
+  n.r = 1;
+  try { n.v = exec(n), n.st = 0; } finally { n.r = 0; }
 };
+
+// the teardown is cleared before the body runs, so a body that throws cannot leak it into the
+// next run
+const run = (fx) => (fx.t?.call?.(), fx.t = 0, fx.t = exec(fx));
 
 // A write made while a cascade is running joins that cascade instead of recursing into it.
-const flush = (i = 0) => {
+const flush = (fx, i = 0) => {
   if (!flushing)
     try {
-      flushing = 1;
-      for (; queue.size;) {
+      for (flushing = 1; queue.size;) {
         if (++i > 1e5) throw Error('depth');
-        const fx = queue.values().next().value;
+        fx = queue.values().next().value;
         queue.delete(fx);
         fx.f && run(fx); // an effect disposed by an earlier one is skipped
       }
@@ -58,16 +62,13 @@ const untracked = (fn, prev) => {
 };
 
 const effect = (fn, fx) => (
-  fx = { fn, f: 1, d: new Set },
+  fx = { fn, f: 1 }, // no dependency set yet: `exec` allocates it
   run(fx),
-  () => {
-    if (fx.f) {
-      fx.f = 0, fx.t?.call?.(), fx.t = 0;
-      // release every subscription the effect holds
-      for (const dep of fx.d) dep.o.delete(fx);
-      fx.d = 0;
-    }
-  }
+  () => fx.f && (
+    fx.f = 0, fx.t?.call?.(), fx.t = 0,
+    // release every subscription the effect holds
+    fx.d.forEach((dep) => dep.o.delete(fx)), fx.d = 0
+  )
 );
 
 // ---- function flavour: the callable is the signal ----
@@ -89,7 +90,7 @@ const memo = (fn, f) => oShare(
   },
   f.fn = fn, f.st = 1,
   // peek never subscribes, but still recomputes
-  f.peek = () => untracked(() => f())
+  f.peek = () => untracked(f)
 );
 
 export { batch, effect, memo, o, untracked };

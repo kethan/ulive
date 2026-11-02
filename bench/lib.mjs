@@ -7,6 +7,12 @@ export const libs = {
     return { name: 'ulive', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
       get: (s) => s.value, set: (s, v) => s.value = v };
   },
+  // any build: ULIVE_MODULE=/path/to/index.es.js node --expose-gc bench.mjs file
+  file: async () => {
+    const m = await import(process.env.ULIVE_MODULE + '?v=' + Math.random());
+    return { name: process.env.ULIVE_MODULE.split('/').pop(), signal: m.signal, computed: m.computed,
+      effect: m.effect, batch: m.batch, get: (s) => s.value, set: (s, v) => s.value = v };
+  },
   'ulive-lazy': async () => {
     const m = await import('./reactivity/ulive-lazy.es.js');
     return { name: 'ulive (pull)', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
