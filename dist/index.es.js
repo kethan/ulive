@@ -1,26 +1,48 @@
 let current, batched;
 
-// share value getters: toJSON/valueOf/toString for coercion, then() for `await`
-// then() keeps returning the value when called without a resolver
-const sigShare = (s) => {
-  s.toJSON = s.toString = s.valueOf = s.then = (res) => res ? res(s.value) : s.value;
-  return s;
+// Notify the subscribers that existed when the write started: an effect may subscribe new
+// effects while it runs, and those must hear about the next write, not this one.
+const fire = (obs) => {
+  if (obs) for (const fx of [...obs]) batched ? batched.add(fx) : fx();
 };
 
-const signal = (v, s, obs = new Set) => sigShare(
-  {
-    get value() {
-      current?.deps.push(obs.add(current));
-      return v;
-    },
-    set value(val) {
-      if (Object.is(val, v)) return;
-      v = val;
-      for (const sub of [...obs]) batched ? batched.add(sub) : sub();
-    },
-    peek: () => v,
+// One shared shape per instance: only the value and the subscriber set are per-signal, every
+// method lives on the prototype, so creating a signal allocates no closures.
+class Signal {
+  constructor(v) { this.v = v; }
+  get value() {
+    const c = current;
+    if (c) (c.deps.push(this.o ||= new Set), this.o.add(c));
+    return this.v;
   }
-);
+  set value(x) { Object.is(x, this.v) || (this.v = x, fire(this.o)); }
+  peek() { return this.v }
+  // coercion reads through the getter: `computed(() => num * 2)` must subscribe,
+  // and then() keeps returning the value when called without a resolver
+  then(res) { const v = this.value; return res ? res(v) : v }
+  toJSON() { return this.value }
+  valueOf() { return this.value }
+  toString() { return String(this.value) }
+}
+
+// a computed is a signal plus a lazy producer effect keeping it current
+class Computed extends Signal {
+  constructor(fn) { super(); this.fn = fn; }
+  get value() {
+    if (this.r) throw Error('circular'); // re-entered while initializing: a cycle
+    if (!this.e) {
+      this.r = 1;
+      try { this.e = effect(() => super.value = this.fn()); } finally { this.r = 0; }
+    }
+    return super.value;
+  }
+  // peek never subscribes, but still initializes
+  peek() { return untracked(() => this.value) }
+}
+
+const signal = (v) => new Signal(v);
+
+const computed = (fn) => new Computed(fn);
 
 const effect = (fn, teardown, fx, deps) => (
   fx = (prev) => {
@@ -40,20 +62,6 @@ const effect = (fn, teardown, fx, deps) => (
   }
 );
 
-const computed = (fn, s = signal(), c, e, r) => sigShare(
-  c = {
-    get value() {
-      if (r) throw Error('circular');
-      if (!e) {
-        r = 1;
-        try { e = effect(() => s.value = fn()); } finally { r = 0; }
-      }
-      return s.value;
-    },
-    peek: () => untracked(() => c.value)
-  }
-);
-
 const batch = (fn, fxs = batched, i = 0) => {
   if (!fxs) batched = new Set;
   try {
@@ -62,10 +70,9 @@ const batch = (fn, fxs = batched, i = 0) => {
     if (!fxs) {
       fxs = batched;
       try {
-        // keep batching while flushing, so effects queued by effects are deduped
-        // (iterating the live set also picks up effects queued during the flush)
+        // keep the queue live while flushing: an effect queued by an effect runs once
         for (const fx of fxs) {
-          if (++i > 1e3) throw Error('depth');
+          if (++i > 1e5) throw Error('depth');
           fxs.delete(fx);
           fx();
         }

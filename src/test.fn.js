@@ -333,6 +333,20 @@ t('batch: defers effects to the end of the batch', t => {
   is(mul(), 6)
 })
 
+t('batch: many distinct effects are not mistaken for a loop', t => {
+  let sigs = [], runs = 0
+
+  for (let i = 0; i < 2000; i++) {
+    let s = o(0)
+    sigs.push(s)
+    effect(() => { s(), runs++ })
+  }
+
+  is(runs, 2000)
+  batch(() => { for (const s of sigs) s(1) })
+  is(runs, 4000, 'a 2000 effect batch flushes, it is not a runaway loop')
+})
+
 t('batch: returns the callback result', t => {
   let a = o(0)
   effect(() => a())
