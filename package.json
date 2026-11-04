@@ -18,6 +18,14 @@
 			"import": "./dist/index.es.js",
 			"default": "./dist/index.es.js"
 		},
+		"./tiny": {
+			"types": "./tiny/index.d.ts",
+			"browser": "./tiny/index.es.js",
+			"umd": "./tiny/index.umd.js",
+			"require": "./tiny/index.cjs",
+			"import": "./tiny/index.es.js",
+			"default": "./tiny/index.es.js"
+		},
 		"./fn": {
 			"types": "./fn/index.d.ts",
 			"browser": "./fn/index.es.js",
@@ -29,13 +37,14 @@
 		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"test": "node src/test.js && node src/test.fn.js",
-		"copy:dts": "copyfiles -u 1 \"src/**/*.d.ts\" dist && copyfiles -u 1 \"src/**/*.d.ts\" fn",
+		"test": "node src/test.js && node src/test.fn.js && node src/tiny/test.js",
+		"copy:dts": "copyfiles -u 1 \"src/index.d.ts\" dist && copyfiles -u 1 \"src/index.d.ts\" fn && copyfiles -u 2 \"src/tiny/index.d.ts\" tiny",
 		"build": "rollup --config rollup.config.js && npm run copy:dts"
 	},
 	"files": [
 		"dist",
-		"fn"
+		"fn",
+		"tiny"
 	],
 	"devDependencies": {
 		"@rollup/plugin-terser": "^0.4.4",
