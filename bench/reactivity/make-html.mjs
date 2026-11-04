@@ -100,7 +100,7 @@ Xeon @ 2.60 GHz, 2 cores · Node v22.22.3 · ${paired3.length} scenarios compare
   <div class="card"><div class="k">scenarios rejected</div><div class="v win">0 / 51</div><div class="k">was 3 / 51 before this change</div></div>
   <div class="card"><div class="k">ulive median</div><div class="v">51.6 ms</div><div class="k">old core: 80.5 ms</div></div>
   <div class="card"><div class="k">vs Preact Signals</div><div class="v">2.30×</div><div class="k">ahead on 7 of 49</div></div>
-  <div class="card"><div class="k">size (brotli)</div><div class="v">575 B</div><div class="k">490 B before the redesign</div></div>
+  <div class="card"><div class="k">size (brotli)</div><div class="v">578 B</div><div class="k">490 B before the redesign</div></div>
 </div>
 
 <h2>The final standings</h2>
@@ -151,8 +151,8 @@ running joins that flush instead of recursing into it.</p>
 <div class="scroll"><table>
 <thead><tr><th class="n"></th><th>eager <code>5cef7c3</code></th><th>pull-based <code>8b97cfe</code></th></tr></thead>
 <tbody>
-<tr><th class="n">ulive flavour, min+gz</th><td>1084 raw / 544 gz / 490 brotli</td><td class="best">1175 raw / 612 gz / 575 brotli</td></tr>
-<tr><th class="n">fn flavour</th><td>833 raw / 484 gz / 460 brotli</td><td class="best">1070 raw / 578 gz / 547 brotli</td></tr>
+<tr><th class="n">ulive flavour, min+gz</th><td>1084 raw / 544 gz / 490 brotli</td><td class="best">1169 raw / 610 gz / 578 brotli</td></tr>
+<tr><th class="n">fn flavour</th><td>833 raw / 484 gz / 460 brotli</td><td class="best">1066 raw / 579 gz / 544 brotli</td></tr>
 <tr><th class="n">own test suite</th><td>181 / 176 pass / 5 skip</td><td>181 / 176 pass / 5 skip</td></tr>
 <tr><th class="n">scenarios rejected</th><td class="fail">3 of 51</td><td class="best">0 of 51</td></tr>
 <tr><th class="n">1 effect × 100k writes</th><td class="best">11.8 ms</td><td>29.3 ms</td></tr>

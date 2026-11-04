@@ -213,6 +213,10 @@ Final: **1175 raw / 612 gzip / 575 brotli** (from 1355 / 663 / 617), `fn` flavou
 flavour. Speed is unchanged: five rounds of `../bench.mjs` put every scenario within noise of the
 previous build (0.88–1.17×), and this harness re-ran with 0 failures.
 
+Rebuilding the same sources with the current dev dependencies (terser 5.51 instead of 5.31) gives
+**1169 / 610 / 578** and `fn` **1066 / 579 / 544**: the numbers above are what that commit produced,
+and the few bytes of drift are the minifier's, not the source's.
+
 Two tempting changes were measured and **rejected**:
 
 * `delete fx.f` on dispose instead of `fx.f = 0` saved 9 B but forces V8 into dictionary mode:

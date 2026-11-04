@@ -46,7 +46,7 @@
 	},
 	"scripts": {
 		"test": "node src/test.js && node src/test.fn.js && node src/tiny/test.js && node src/tiny/test.fn.js",
-		"copy:dts": "copyfiles -u 1 \"src/index.d.ts\" dist && copyfiles -u 1 \"src/index.d.ts\" fn && copyfiles -u 2 \"src/tiny/index.d.ts\" tiny && copyfiles -u 3 \"src/tiny/fn/*.d.ts\" tiny/fn",
+		"copy:dts": "node scripts/copy-dts.mjs",
 		"build": "rollup --config rollup.config.js && npm run copy:dts"
 	},
 	"files": [
@@ -55,10 +55,9 @@
 		"tiny"
 	],
 	"devDependencies": {
-		"@rollup/plugin-terser": "^0.4.4",
-		"copyfiles": "^2.4.1",
-		"rollup": "^4.20.0",
-		"terser": "^5.15.0",
+		"@rollup/plugin-terser": "^1.0.2",
+		"rollup": "^4.67.4",
+		"terser": "^5.49.2",
 		"tst": "^7.1.1"
 	},
 	"repository": {

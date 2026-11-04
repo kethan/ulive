@@ -39,10 +39,10 @@ Minified (`dist/index.min.js`, `fn/index.min.js`), then gzip -9 / brotli:
 
 | | raw | gzip | brotli |
 |---|---:|---:|---:|
-| ulive (object flavour) | 1175 | 612 | 575 |
-| ulive/fn (callable flavour) | 1070 | 578 | 547 |
-| ulive/tiny (the original 1.x core) | 629 | 382 | 349 |
-| ulive/tiny/fn (its callable flavour) | 624 | 388 | 351 |
+| ulive (object flavour) | 1169 | 610 | 578 |
+| ulive/fn (callable flavour) | 1066 | 579 | 544 |
+| ulive/tiny (the original 1.x core) | 627 | 381 | 350 |
+| ulive/tiny/fn (its callable flavour) | 622 | 387 | 350 |
 
 The pull-based core that fixed the harness failures was first written at 1355 raw / 617 brotli;
 a measured size pass brought it back down (table in `reactivity/RESULTS.md`).
