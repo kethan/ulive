@@ -23,6 +23,11 @@ export const libs = {
     return { name: 'ulive (closure)', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
       get: (s) => s.value, set: (s, v) => s.value = v };
   },
+  'ulive-tiny': async () => {
+    const m = await import('../tiny/index.es.js');
+    return { name: 'ulive/tiny', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
+      get: (s) => s.value, set: (s, v) => s.value = v };
+  },
   preact: async () => {
     const m = await import('@preact/signals-core');
     return { name: 'preact/signals-core', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
