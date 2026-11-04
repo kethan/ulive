@@ -33,5 +33,6 @@ const resolve = (pkg, input = "src/index", output = "dist/index") => ({
 export default [
 	resolve("ulive"),
 	resolve("ulive", "src/fn", "fn/index"),
-	resolve("ulive", "src/tiny/index", "tiny/index")
+	resolve("ulive", "src/tiny/index", "tiny/index"),
+	resolve("ulive", "src/tiny/fn", "tiny/fn/index")
 ]

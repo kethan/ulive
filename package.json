@@ -26,6 +26,14 @@
 			"import": "./tiny/index.es.js",
 			"default": "./tiny/index.es.js"
 		},
+		"./tiny/fn": {
+			"types": "./tiny/fn/index.d.ts",
+			"browser": "./tiny/fn/index.es.js",
+			"umd": "./tiny/fn/index.umd.js",
+			"require": "./tiny/fn/index.cjs",
+			"import": "./tiny/fn/index.es.js",
+			"default": "./tiny/fn/index.es.js"
+		},
 		"./fn": {
 			"types": "./fn/index.d.ts",
 			"browser": "./fn/index.es.js",
@@ -37,8 +45,8 @@
 		"./package.json": "./package.json"
 	},
 	"scripts": {
-		"test": "node src/test.js && node src/test.fn.js && node src/tiny/test.js",
-		"copy:dts": "copyfiles -u 1 \"src/index.d.ts\" dist && copyfiles -u 1 \"src/index.d.ts\" fn && copyfiles -u 2 \"src/tiny/index.d.ts\" tiny",
+		"test": "node src/test.js && node src/test.fn.js && node src/tiny/test.js && node src/tiny/test.fn.js",
+		"copy:dts": "copyfiles -u 1 \"src/index.d.ts\" dist && copyfiles -u 1 \"src/index.d.ts\" fn && copyfiles -u 2 \"src/tiny/index.d.ts\" tiny && copyfiles -u 3 \"src/tiny/fn/*.d.ts\" tiny/fn",
 		"build": "rollup --config rollup.config.js && npm run copy:dts"
 	},
 	"files": [

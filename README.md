@@ -18,25 +18,33 @@
 
 ## Entries
 
-Three entry points, one package:
+Four entry points, two flavours:
 
-| entry | what | min | gzip | brotli |
-| --- | --- | ---: | ---: | ---: |
-| `ulive` | the current core: glitch-free delivery, guarded cycles and loops, per-run dependency pruning | 1175 B | 612 B | **575 B** |
-| `ulive/fn` | the same core with the callable API (`o`, `memo`) | 1070 B | 578 B | **547 B** |
-| `ulive/tiny` | the original 1.x core, unchanged - **~30% smaller, but bug-compatible** | 629 B | 382 B | **349 B** |
+| flavour | current core | original 1.x core |
+| --- | --- | --- |
+| object (`signal`, `computed`) | `ulive` - 1175 / 612 / **575 B** | `ulive/tiny` - 629 / 382 / **349 B** |
+| callable (`o`, `memo`) | `ulive/fn` - 1070 / 578 / **547 B** | `ulive/tiny/fn` - 624 / 388 / **351 B** |
 
-Sizes are the shipped minified builds (`dist/index.min.js`, `fn/index.min.js`,
-`tiny/index.min.js`), then `gzip -9` and `brotli`.
-
-`ulive/tiny` is not a subset of `ulive` - it is the older implementation, kept for bundle size. It
-has the same five exports (`signal`, `computed`, `effect`, `batch`, `untracked`) and it is the
-right choice only if every byte counts and you can live with the differences below. Both are tested:
-`npm test` runs the `ulive` suite, the `ulive/fn` suite and the `ulive/tiny` suite.
+Each cell is minified / `gzip -9` / **`brotli`**, from the shipped builds (`dist/index.min.js`,
+`fn/index.min.js`, `tiny/index.min.js`, `tiny/fn/index.min.js`).
 
 ```js
-import { signal, computed, effect } from "ulive/tiny";   // 349 B brotli
-import { signal, computed, effect } from "ulive";        // 575 B brotli
+import { signal, computed, effect } from "ulive";        // 575 B brotli - default
+import { o, memo, effect } from "ulive/fn";              // 547 B brotli
+import { signal, computed, effect } from "ulive/tiny";   // 349 B brotli - 1.x behaviour
+import { o, memo, effect } from "ulive/tiny/fn";         // 351 B brotli - 1.x behaviour
+```
+
+The `tiny` pair is not a subset of the current core - it is the 1.x implementation, kept for bundle
+size, with the same exports and the same API shape. Pick it only if every byte counts and you can
+live with the differences below; pick the current core otherwise. All four are tested, and `npm
+test` runs every suite:
+
+```
+ulive         181 assertions / 176 pass / 5 skip
+ulive/fn      181 assertions / 176 pass / 5 skip
+ulive/tiny     51 assertions /  51 pass
+ulive/tiny/fn  46 assertions /  46 pass
 ```
 
 ### What `ulive/tiny` does differently
@@ -55,7 +63,16 @@ import { signal, computed, effect } from "ulive";        // 575 B brotli
 | `await signal(x)` | resolves with the value | **never resolves** (`then` ignores the resolver) |
 | an effect that subscribes new effects to the same signal | bounded (the notification walks a snapshot) | grows geometrically until out of memory |
 
-Performance, same machine, same scenario code (`bench/bench.mjs`): `ulive/tiny` pays for what it
+The callable flavour has the same differences, plus two that only exist there:
+
+| | `ulive/fn` | `ulive/tiny/fn` |
+| --- | --- | --- |
+| `o(9)` returns | the written value | `undefined` |
+| `memo.peek()` before the first read | initializes and returns the value | returns `undefined` |
+| writing to a `memo` | ignored by both | ignored by both |
+
+Performance, same machine, same scenario code (`bench/bench.mjs`, object flavour): `ulive/tiny`
+pays for what it
 skips. It is **2-3x faster** when work is a single signal and one effect (`1 signal, 1 effect, 100k
 writes` 12.3 vs 29.1 ms, `100 effects, 10k writes` 52.4 vs 194 ms) and on creation it is **35x
 slower** (`create 100k signals` 134.6 vs 3.8 ms, because every `signal()` allocates its own
