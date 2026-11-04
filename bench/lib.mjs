@@ -28,6 +28,12 @@ export const libs = {
     return { name: 'ulive/tiny', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
       get: (s) => s.value, set: (s, v) => s.value = v };
   },
+  'ulive-tiny-fn': async () => {
+    const m = await import('../tiny/fn/index.es.js');
+    return { name: 'ulive/tiny/fn', signal: (v) => { const s = m.o(v); return { peek: s.peek, get value() { return s(); }, set value(x) { s(x) } }; },
+      computed: (f) => { const c = m.memo(f); return { peek: c.peek, get value() { return c(); } }; },
+      effect: m.effect, batch: m.batch, get: (s) => s.value, set: (s, v) => s.value = v };
+  },
   preact: async () => {
     const m = await import('@preact/signals-core');
     return { name: 'preact/signals-core', signal: m.signal, computed: m.computed, effect: m.effect, batch: m.batch,
