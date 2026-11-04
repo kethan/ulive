@@ -22,17 +22,17 @@ Four entry points, two flavours:
 
 | flavour | current core | original 1.x core |
 | --- | --- | --- |
-| object (`signal`, `computed`) | `ulive` - 1175 / 612 / **575 B** | `ulive/tiny` - 629 / 382 / **349 B** |
-| callable (`o`, `memo`) | `ulive/fn` - 1070 / 578 / **547 B** | `ulive/tiny/fn` - 624 / 388 / **351 B** |
+| object (`signal`, `computed`) | `ulive` - 1169 / 610 / **578 B** | `ulive/tiny` - 627 / 381 / **350 B** |
+| callable (`o`, `memo`) | `ulive/fn` - 1066 / 579 / **544 B** | `ulive/tiny/fn` - 622 / 387 / **350 B** |
 
 Each cell is minified / `gzip -9` / **`brotli`**, from the shipped builds (`dist/index.min.js`,
 `fn/index.min.js`, `tiny/index.min.js`, `tiny/fn/index.min.js`).
 
 ```js
-import { signal, computed, effect } from "ulive";        // 575 B brotli - default
-import { o, memo, effect } from "ulive/fn";              // 547 B brotli
-import { signal, computed, effect } from "ulive/tiny";   // 349 B brotli - 1.x behaviour
-import { o, memo, effect } from "ulive/tiny/fn";         // 351 B brotli - 1.x behaviour
+import { signal, computed, effect } from "ulive";        // 578 B brotli - default
+import { o, memo, effect } from "ulive/fn";              // 544 B brotli
+import { signal, computed, effect } from "ulive/tiny";   // 350 B brotli - 1.x behaviour
+import { o, memo, effect } from "ulive/tiny/fn";         // 350 B brotli - 1.x behaviour
 ```
 
 The `tiny` pair is not a subset of the current core - it is the 1.x implementation, kept for bundle

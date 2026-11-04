@@ -175,7 +175,7 @@ def main():
         ('scenarios rejected', '0 / 51', 'was 3 / 51 before the fix'),
         ('ulive median', '51.6 ms', 'old core: 80.5 ms'),
         ('vs Preact', '2.30x', 'ahead on 7 of 49 scenarios'),
-        ('size, brotli', '575 B', '490 B before redesign'),
+        ('size, brotli', '578 B', '490 B before redesign'),
     ])
 
     p.h2('Final standings — median of the 49 scenarios every build completes')
